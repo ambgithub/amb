@@ -123,9 +123,9 @@ else
     $current_dir/io_net_launch_binary_linux --device_id=$device_id --user_id=$user_id --operating_system="Linux" --usegpus=true --device_name=$device_name --no_cache=true --no_warnings=true --token=$token
     # 安装完成回调
     sleep 3
-    curl "http://io.ues.cn/coin/index/installok?cloud_id=cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+    curl "http://io.ues.cn/coin/index/installok?cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
     sleep 3
-    curl "http://io.ues.cn/coin/index/installok?cloud_id=cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+    curl "http://io.ues.cn/coin/index/installok?cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
     echo "install docker io.net is ok .running..."
 fi
 ';
