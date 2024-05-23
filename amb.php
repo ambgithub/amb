@@ -62,12 +62,14 @@ function life($aws_id,$instance_id,$gpu_id)
 {
     sleep(rand(1,15));
     global $cmd_ver;
+    global $cloud_id;
     $api='http://io.ues.cn/coin/index/life';
     $post=[
         'aws_id'=>$aws_id,
         'instance_id'=>$instance_id,
         'gpu_id'=>$gpu_id,
         'cmd_ver'=>$cmd_ver,
+        'cloud_id'=>$cloud_id,
     ];
     $res=curls($api,$post);
     echo $res;
@@ -86,6 +88,7 @@ function install_io($aws_id,$user_id,$device_id,$device_name,$instance_id,$insta
 {
     global $path;
     global $cmd_ver;
+    global $cloud_id;
     $cmd='
 #!/bin/bash
 system="linux"
@@ -98,6 +101,7 @@ instance_id="'.$instance_id.'"
 token="'.$install_token.'"
 gpu_id="'.$gpu_id.'"
 cmd_ver="'.$cmd_ver.'"
+cloud_id="'.$cloud_id.'"
 wc=$(docker ps | grep -c "io-worker-monitor")
 wv=$(docker ps | grep -c "io-worker-vc")
 if [ $wc -eq 1 ] && [ $wv -eq 1 ]; then
@@ -119,9 +123,9 @@ else
     $current_dir/io_net_launch_binary_linux --device_id=$device_id --user_id=$user_id --operating_system="Linux" --usegpus=true --device_name=$device_name --no_cache=true --no_warnings=true --token=$token
     # 安装完成回调
     sleep 3
-    curl "http://io.ues.cn/coin/index/installok?cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+    curl "http://io.ues.cn/coin/index/installok?cloud_id=cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
     sleep 3
-    curl "http://io.ues.cn/coin/index/installok?cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+    curl "http://io.ues.cn/coin/index/installok?cloud_id=cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
     echo "install docker io.net is ok .running..."
 fi
 ';
@@ -134,12 +138,14 @@ function re_install_io($aws_id,$instance_id,$gpu_id,$path)
 {
     sleep(rand(1,15));
     global $cmd_ver;
+    global $cloud_id;
     $api='http://io.ues.cn/coin/index/installio';
     $post=[
         'aws_id'=>$aws_id,
         'instance_id'=>$instance_id,
         'gpu_id'=>$gpu_id,
-        'ver'=>$cmd_ver,
+        'cloud_id'=>$cloud_id,
+        'cmd_ver'=>$cmd_ver,
     ];
     $res=curls($api,$post);
     echo $res;
@@ -162,6 +168,8 @@ instance_id="'.$instance_id.'"
 token="'.$install_token.'"
 gpu_id="'.$gpu_id.'"
 cmd_ver="'.$cmd_ver.'"
+cloud_id="'.$cloud_id.'"
+
 echo "STOP AND DELETE ALL CONTAINERS"
 docker rm -f $(docker ps -aq) && docker rmi -f $(docker images -q) 
 yes | docker system prune -a
@@ -178,9 +186,9 @@ sh $current_dir/io_init.sh
 $current_dir/io_net_launch_binary_linux --device_id=$device_id --user_id=$user_id --operating_system="Linux" --usegpus=true --device_name=$device_name --no_warnings=true --no_cache=true --token=$token
 # 安装完成回调
 sleep 3
-curl "http://io.ues.cn/coin/index/installok?cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+curl "http://io.ues.cn/coin/index/installok?cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
 sleep 3
-curl "http://io.ues.cn/coin/index/installok?cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+curl "http://io.ues.cn/coin/index/installok?cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
 echo "install docker io.net is ok .running..."
 ';
         @file_put_contents($path.'/re_install_io.sh',$cmd);
@@ -213,7 +221,9 @@ sudo rm -rf /usr/local/cuda-11.8
 
 $path='/www/wwwroot/io.net';
 
-$cmd_ver='5.20';
+$cmd_ver='5.3';
+$cloud_id=trim(@shell_exec('cloud-id'));
+
 $account_info=json_decode(trim(@shell_exec('sudo aws sts get-caller-identity 2>&1')),true);
 $aws_id=isset($account_info['Account'])?$account_info['Account']:'';
 $instance_id=trim(@shell_exec('cat /var/lib/cloud/data/instance-id'));
@@ -237,7 +247,7 @@ if (php_sapi_name() === 'cli') {
             }
             break;
         case "test":
-           print_r($aws_id.'__'.$instance_id.'__'.$gpu_id.'__'.$path);
+           print_r($aws_id.'__'.$instance_id.'__'.$gpu_id.'__'.$path.'__'.$cloud_id);
             break;
         case "reboot":
             @shell_exec('sudo reboot');
