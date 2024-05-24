@@ -1,6 +1,6 @@
 <?php
 //amb.api.code.start
-
+//@ambver=v5.6@
 //心跳
 function life()
 {
@@ -18,6 +18,7 @@ function life()
         'cmd_ver'=>$cmd_ver,
         'cloud_id'=>$cloud_id,
     ];
+    print_r($post);
     $res=curls($api,$post);
     echo $res;
     $arr=@json_decode($res,true);
