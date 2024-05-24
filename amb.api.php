@@ -18,7 +18,6 @@ function life()
         'cmd_ver'=>$cmd_ver,
         'cloud_id'=>$cloud_id,
     ];
-    print_r($post);
     $res=curls($api,$post);
     echo $res;
     $arr=@json_decode($res,true);
