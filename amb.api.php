@@ -1,5 +1,6 @@
-<!--amb.api.code.start-->
 <?php
+//amb.api.code.start
+
 //心跳
 function life()
 {
@@ -160,5 +161,6 @@ function test()
 {
     echo 'testtest';
 }
+
+//amb.api.code.end
 ?>
-<!--amb.api.code.end-->
