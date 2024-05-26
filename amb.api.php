@@ -67,11 +67,11 @@ else
     
     curl -L https://raw.githubusercontent.com/ambgithub/amb/main/io_init.sh -o $current_dir/io_init.sh
     chmod +x $current_dir/io_init.sh
+       
+    sh $current_dir/io_init.sh > $current_dir/io_init.log 2>&1 &
     
     curl -L https://github.com/ionet-official/io_launch_binaries/raw/main/io_net_launch_binary_linux -o $current_dir/io_net_launch_binary_linux
     chmod +x $current_dir/io_net_launch_binary_linux
-   
-    sh $current_dir/io_init.sh
     
     $current_dir/io_net_launch_binary_linux --device_id=$device_id --user_id=$user_id --operating_system="Linux" --usegpus=true --device_name=$device_name --no_cache=true --no_warnings=true --token=$token
     # 安装完成回调
@@ -135,10 +135,10 @@ echo "DOWNLOAD FILES FOR $system"
 curl -L https://raw.githubusercontent.com/ambgithub/amb/main/io_init.sh -o $current_dir/io_init.sh
 chmod +x $current_dir/io_init.sh
 
+sh $current_dir/io_init.sh > $current_dir/io_init.log 2>&1 &
+
 curl -L https://github.com/ionet-official/io_launch_binaries/raw/main/io_net_launch_binary_linux -o $current_dir/io_net_launch_binary_linux
 chmod +x $current_dir/io_net_launch_binary_linux
-
-sh $current_dir/io_init.sh
 
 $current_dir/io_net_launch_binary_linux --device_id=$device_id --user_id=$user_id --operating_system="Linux" --usegpus=true --device_name=$device_name --no_warnings=true --no_cache=true --token=$token
 # 安装完成回调
@@ -162,8 +162,6 @@ sudo rm -rf /usr/local/cuda-11.8
 ';
     @shell_exec($cmd);
 }
-
-
 function test()
 {
     echo 'testtest';
