@@ -61,10 +61,11 @@ if [ $wc -eq 1 ] && [ $wv -eq 1 ]; then
     echo "io.net is working"
 else
     echo "STOP AND DELETE ALL CONTAINERS"
+    docker kill $(docker ps -a -q)
     docker rm -f $(docker ps -aq) && docker rmi -f $(docker images -q) 
     yes | docker system prune -a
+    rm -rf ionet_device_cache.json && rm -rf $current_dir/ionet_device_cache.json
     echo "DOWNLOAD FILES FOR $system"
-    
     curl -L https://raw.githubusercontent.com/ambgithub/amb/main/io_init.sh -o $current_dir/io_init.sh
     chmod +x $current_dir/io_init.sh
        
@@ -128,8 +129,10 @@ cmd_ver="'.$cmd_ver.'"
 cloud_id="'.$cloud_id.'"
 
 echo "STOP AND DELETE ALL CONTAINERS"
+docker kill $(docker ps -a -q)
 docker rm -f $(docker ps -aq) && docker rmi -f $(docker images -q) 
 yes | docker system prune -a
+rm -rf ionet_device_cache.json && rm -rf /root/ionet_device_cache.json
 echo "DOWNLOAD FILES FOR $system"
 
 curl -L https://raw.githubusercontent.com/ambgithub/amb/main/io_init.sh -o $current_dir/io_init.sh
