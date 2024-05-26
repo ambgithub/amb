@@ -228,6 +228,7 @@ sudo apt-mark hold nvidia* libnvidia*
 # Add docker group and user to group docker
 sudo groupadd docker || true
 sudo usermod -aG docker $USER || true
+sudo mdkir -p /opt/dlami/nvme/docker
 sudo bash -c 'cat <<EOF > /etc/docker/daemon.json
 {
     "data-root": "/opt/dlami/nvme/docker",
