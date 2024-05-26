@@ -74,7 +74,7 @@ else
                                 export LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64:${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
                                 sudo apt-get update
                                 ;;
-                            
+
                             "22.04")
                                 # Commands specific to Ubuntu 22.04
                                 sudo -- sh -c 'apt-get update; apt-get upgrade -y; apt-get autoremove -y; apt-get autoclean -y'
@@ -84,13 +84,13 @@ else
                                 sudo apt remove 7fa2af80 || true
                                 sudo apt install build-essential cmake gpg unzip pkg-config software-properties-common ubuntu-drivers-common -y
                                 sudo apt install libxmu-dev libxi-dev libglu1-mesa libglu1-mesa-dev -y
-                                sudo apt install libjpeg-dev libpng-dev libtiff-dev -y 
-                                sudo apt install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev -y 
+                                sudo apt install libjpeg-dev libpng-dev libtiff-dev -y
+                                sudo apt install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev -y
                                 sudo apt install libxvidcore-dev libx264-dev -y
-                                sudo apt install libopenblas-dev libatlas-base-dev liblapack-dev gfortran -y 
-                                sudo apt install libhdf5-serial-dev -y 
+                                sudo apt install libopenblas-dev libatlas-base-dev liblapack-dev gfortran -y
+                                sudo apt install libhdf5-serial-dev -y
                                 sudo apt install python3-dev python3-tk curl gnupg-agent dirmngr alsa-utils -y
-                                sudo apt install libgtk-3-dev -y 
+                                sudo apt install libgtk-3-dev -y
                                 sudo apt update -y
                                 sudo dirmngr </dev/null
                                 if sudo apt-add-repository -y ppa:graphics-drivers/ppa && sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FCAE110B1118213C; then
@@ -144,7 +144,7 @@ else
                                 ;;
                         esac
                         ;;
-                    
+
                     "debian")
                         case $VERSION in
                             "10"|"11")
@@ -198,12 +198,12 @@ if [[ ! -z "$NVIDIA_PRESENT" ]]; then
     nvidia-smi
 fi
 
+
 # Check if docker-compose is installed
 if command -v docker-compose &>/dev/null; then
     echo "Docker-compose is already installed."
 else
     echo "Docker-compose is not installed. Proceeding with installations..."
-
     # Install docker-compose subcommand
     sudo apt -y install docker-compose-plugin
     sudo ln -sv /usr/libexec/docker/cli-plugins/docker-compose /usr/bin/docker-compose
@@ -220,7 +220,7 @@ if [[ ! -z "$NVIDIA_PRESENT" ]]; then
         curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add
         curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
         sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
-        sudo systemctl restart docker 
+        sudo systemctl restart docker
         sudo docker run --gpus all nvidia/cuda:11.0.3-base-ubuntu18.04 nvidia-smi
     fi
 fi
@@ -228,17 +228,6 @@ sudo apt-mark hold nvidia* libnvidia*
 # Add docker group and user to group docker
 sudo groupadd docker || true
 sudo usermod -aG docker $USER || true
-# Workaround for NVIDIA Docker Issue
-echo "Applying workaround for NVIDIA Docker issue as per https://github.com/NVIDIA/nvidia-docker/issues/1730"
-# Summary of issue and workaround:
-# The issue arises when the host performs daemon-reload, which may cause containers using systemd to lose access to NVIDIA GPUs.
-# To check if affected, run `sudo systemctl daemon-reload` on the host, then check GPU access in the container with `nvidia-smi`.
-# If affected, proceed with the workaround below.
 
-# Workaround Steps:
-# Disable cgroups for Docker containers to prevent the issue.
-# Edit the Docker daemon configuration.
-
-# Restart Docker to apply changes.
 sudo systemctl restart docker
 echo "Workaround applied. Docker has been configured to use 'cgroupfs' as the cgroup driver."
