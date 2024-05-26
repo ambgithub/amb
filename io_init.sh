@@ -209,20 +209,6 @@ else
     docker-compose --version
 fi
 
-# Test / Install nvidia-docker
-if [[ ! -z "$NVIDIA_PRESENT" ]]; then
-    if sudo docker run --gpus all nvidia/cuda:11.0.3-base-ubuntu18.04 nvidia-smi &>/dev/null; then
-        echo "nvidia-docker is enabled and working. Exiting script."
-    else
-        echo "nvidia-docker does not seem to be enabled. Proceeding with installations..."
-        distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-        curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add
-        curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
-        sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
-        sudo systemctl restart docker
-        sudo docker run --gpus all nvidia/cuda:11.0.3-base-ubuntu18.04 nvidia-smi
-    fi
-fi
 sudo apt-mark hold nvidia* libnvidia*
 # Add docker group and user to group docker
 
