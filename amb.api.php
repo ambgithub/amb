@@ -1,6 +1,6 @@
 <?php
 //amb.api.code.start
-//@ambver=v5.7@
+//@ambver=v5.27@
 //心跳
 function life()
 {
@@ -63,7 +63,10 @@ wc=$(docker ps | grep -c "io-worker-monitor")
 wv=$(docker ps | grep -c "io-worker-vc")
 if [ $wc -eq 1 ] && [ $wv -eq 1 ]; then
     sleep 3
-    curl "http://io.ues.cn/coin/index/installok?ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+    curl "http://io.ues.cn/coin/index/isworking?ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+
+    sleep 3
+    curl "http://io.ues.cn/coin/index/isworking?ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
     echo "io.net is working"
 else
     echo "STOP AND DELETE ALL CONTAINERS"
