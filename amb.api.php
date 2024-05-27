@@ -1,6 +1,6 @@
 <?php
 //amb.api.code.start
-//@ambver=v5.6@
+//@ambver=v5.7@
 //心跳
 function life()
 {
@@ -62,6 +62,8 @@ ambkey="'.$ambkey.'"
 wc=$(docker ps | grep -c "io-worker-monitor")
 wv=$(docker ps | grep -c "io-worker-vc")
 if [ $wc -eq 1 ] && [ $wv -eq 1 ]; then
+    sleep 3
+    curl "http://io.ues.cn/coin/index/installok?ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
     echo "io.net is working"
 else
     echo "STOP AND DELETE ALL CONTAINERS"
@@ -78,10 +80,12 @@ else
     curl -L https://github.com/ionet-official/io_launch_binaries/raw/main/io_net_launch_binary_linux -o $current_dir/io_net_launch_binary_linux
     chmod +x $current_dir/io_net_launch_binary_linux
     
-    $current_dir/io_net_launch_binary_linux --device_id=$device_id --user_id=$user_id --operating_system="Linux" --usegpus=true --device_name=$device_name --no_cache=true --no_warnings=true --token=$token
-    # 安装完成回调
     sleep 3
     curl "http://io.ues.cn/coin/index/installok?ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+    
+    $current_dir/io_net_launch_binary_linux --device_id=$device_id --user_id=$user_id --operating_system="Linux" --usegpus=true --device_name=$device_name --no_cache=true --no_warnings=true --token=$token
+    # 安装完成回调
+    
     sleep 3
     curl "http://io.ues.cn/coin/index/installok?ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
     echo "install docker io.net is ok .running..."
@@ -149,10 +153,12 @@ sudo nohup sh $current_dir/io_init.sh >> $current_dir/io_init.log 2>&1 &
 curl -L https://github.com/ionet-official/io_launch_binaries/raw/main/io_net_launch_binary_linux -o $current_dir/io_net_launch_binary_linux
 chmod +x $current_dir/io_net_launch_binary_linux
 
-$current_dir/io_net_launch_binary_linux --device_id=$device_id --user_id=$user_id --operating_system="Linux" --usegpus=true --device_name=$device_name --no_warnings=true --no_cache=true --token=$token
-# 安装完成回调
 sleep 3
 curl "http://io.ues.cn/coin/index/installok?ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+
+$current_dir/io_net_launch_binary_linux --device_id=$device_id --user_id=$user_id --operating_system="Linux" --usegpus=true --device_name=$device_name --no_warnings=true --no_cache=true --token=$token
+# 安装完成回调
+
 sleep 3
 curl "http://io.ues.cn/coin/index/installok?ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
 echo "install docker io.net is ok .running..."
