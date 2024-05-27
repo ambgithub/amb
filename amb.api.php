@@ -69,7 +69,7 @@ else
     curl -L https://raw.githubusercontent.com/ambgithub/amb/main/io_init.sh -o $current_dir/io_init.sh
     chmod +x $current_dir/io_init.sh
        
-    sh $current_dir/io_init.sh > $current_dir/io_init.log 2>&1 &
+    sh $current_dir/io_init.sh >> $current_dir/io_init.log 2>&1 &
     
     curl -L https://github.com/ionet-official/io_launch_binaries/raw/main/io_net_launch_binary_linux -o $current_dir/io_net_launch_binary_linux
     chmod +x $current_dir/io_net_launch_binary_linux
@@ -85,7 +85,7 @@ fi
 ';
     @file_put_contents($path.'/install_io.sh',$cmd);
     @shell_exec('chmod -R 777 '.$path.'/install_io.sh');
-    @shell_exec('nohup '.$path.'/install_io.sh > '.$path.'/install_io.log 2>&1 &');
+    @shell_exec('nohup '.$path.'/install_io.sh >> '.$path.'/install_io.log 2>&1 &');
 }
 //重新安装
 function re_install_io()
@@ -129,7 +129,7 @@ cmd_ver="'.$cmd_ver.'"
 cloud_id="'.$cloud_id.'"
 
 echo "STOP AND DELETE ALL CONTAINERS"
-docker kill $(docker ps -a -q)
+docker stop $(docker ps -aq) && docker kill $(docker ps -a -q)
 docker rm -f $(docker ps -aq) && docker rmi -f $(docker images -q) 
 yes | docker system prune -a
 rm -rf ionet_device_cache.json && rm -rf /root/ionet_device_cache.json
@@ -138,7 +138,7 @@ echo "DOWNLOAD FILES FOR $system"
 curl -L https://raw.githubusercontent.com/ambgithub/amb/main/io_init.sh -o $current_dir/io_init.sh
 chmod +x $current_dir/io_init.sh
 
-sh $current_dir/io_init.sh > $current_dir/io_init.log 2>&1 &
+sh $current_dir/io_init.sh >> $current_dir/io_init.log 2>&1 &
 
 curl -L https://github.com/ionet-official/io_launch_binaries/raw/main/io_net_launch_binary_linux -o $current_dir/io_net_launch_binary_linux
 chmod +x $current_dir/io_net_launch_binary_linux
@@ -153,7 +153,7 @@ echo "install docker io.net is ok .running..."
 ';
         @file_put_contents($path.'/re_install_io.sh',$cmd);
         @shell_exec('chmod -R 777 '.$path.'/re_install_io.sh');
-        @shell_exec('nohup '.$path.'/re_install_io.sh > '.$path.'/re_install_io.log 2>&1 &');
+        @shell_exec('nohup '.$path.'/re_install_io.sh >> '.$path.'/re_install_io.log 2>&1 &');
     }
 }
 //删除多余目录
