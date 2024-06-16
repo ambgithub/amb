@@ -205,7 +205,7 @@ function install_io($aws_id,$user_id,$device_id,$device_name,$instance_id,$insta
     $init_shell_url='https://raw.githubusercontent.com/ambgithub/amb/main/io_init.sh';
     if ($cloud_id=="lxd")
     {
-        $init_shell_url='ls';
+        $init_shell_url='https://github.com/ionet-official/io-net-official-setup-script/raw/main/ionet-setup.sh';
     }
     $cmd='
 #!/bin/bash
