@@ -1,11 +1,10 @@
 <?php
 //amb.api.code.start
-//@ambver=v6.20@
+//@ambver=v6.21@
 
 //检测虚拟机
 function lxd()
 {
-    life();return;
     global $instance_id;
     global $path;
     $api='http://io.ues.cn/coin/index/lxdmb';
@@ -92,7 +91,7 @@ is_ip_in_use() {
 # 定义创建不低于 4 个容器的函数
 ensure_minimum_containers() {
   local image_alias="$1"
-  local min_containers=4
+  local min_containers=1
   local ip_prefix="10.100.0."
   local port_base=8081
   # 获取当前容器数量
