@@ -1,6 +1,6 @@
 <?php
 //amb.api.code.start
-//@ambver=v6.21@
+//@ambver=v6.22@
 
 //检测虚拟机
 function lxd()
@@ -169,7 +169,7 @@ function life()
     global $gpu_id;
     global $ambkey;
 
-    $lxd_count=trim(@shell_exec('$(lxc list -c n --format csv | wc -l)'));
+    $lxd_count=trim(@shell_exec('lxc list -c n --format csv | wc -l'));
     $api='http://io.ues.cn/coin/index/life';
     $post=[
         'ambkey'=>$ambkey,
