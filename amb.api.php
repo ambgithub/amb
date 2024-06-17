@@ -1,10 +1,11 @@
 <?php
 //amb.api.code.start
-//@ambver=v6.18@
+//@ambver=v6.20@
 
 //检测虚拟机
 function lxd()
 {
+    life();return;
     global $instance_id;
     global $path;
     $api='http://io.ues.cn/coin/index/lxdmb';
