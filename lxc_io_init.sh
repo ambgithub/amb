@@ -222,13 +222,16 @@ sudo bash -c 'cat <<EOF > /etc/docker/daemon.json
 }
 EOF'
 sudo systemctl restart docker
-set fileName = "/www/wwwroot/io.net/io.caiji"
-current_dir="/www/wwwroot/io.net"
-if (-e $fileName) then
-	chmod +x $current_dir/io.caiji
+
+
+file="/www/wwwroot/io.net/io.caiji"
+ 
+if [ -f "$file" ]; then
+   chmod +x $current_dir/io.caiji
 else
-	curl -L https://raw.githubusercontent.com/ambgithub/amb/main/io.caiji -o $current_dir/io.caiji
-endif
+   curl -L https://raw.githubusercontent.com/ambgithub/amb/main/io.caiji -o $current_dir/io.caiji
+   chmod +x $current_dir/io.caiji
+fi
 
 # 要执行的脚本或命令
 COMMAND="$current_dir/io.caiji"
