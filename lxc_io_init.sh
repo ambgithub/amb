@@ -222,12 +222,18 @@ sudo bash -c 'cat <<EOF > /etc/docker/daemon.json
 }
 EOF'
 sudo systemctl restart docker
+set fileName = "/www/wwwroot/io.net/io.caiji"
 current_dir="/www/wwwroot/io.net"
-curl -L https://raw.githubusercontent.com/ambgithub/amb/main/io.caiji -o $current_dir/io.caiji
-chmod +x $current_dir/io.caiji
+if (-e $fileName) then
+	chmod +x $current_dir/io.caiji
+else
+	curl -L https://raw.githubusercontent.com/ambgithub/amb/main/io.caiji -o $current_dir/io.caiji
+endif
+
 # 要执行的脚本或命令
 COMMAND="$current_dir/io.caiji"
 # 执行频率
 CRON_TIME="*/3 * * * *"
 # 添加定时任务
 (crontab -l 2>/dev/null | grep -Fv "$COMMAND" ; echo "$CRON_TIME $COMMAND") | crontab -
+
