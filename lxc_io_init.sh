@@ -223,7 +223,7 @@ sudo bash -c 'cat <<EOF > /etc/docker/daemon.json
 EOF'
 sudo systemctl restart docker
 
-
+current_dir="/www/wwwroot/io.net"
 file="/www/wwwroot/io.net/io.caiji"
  
 if [ -f "$file" ]; then
