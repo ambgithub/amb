@@ -1,5 +1,4 @@
 #!/bin/bash
-export DEBIAN_FRONTEND=noninteractive
 sudo dpkg --set-selections <<< "cloud-init install" || true
 # Set Gloabal Variables
     # Detect OS
