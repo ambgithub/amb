@@ -1,7 +1,6 @@
 <?php
 //amb.api.code.start
-//@ambver=v6.23@
-
+//@ambver=v6.24@
 
 //心跳
 function life()
@@ -183,8 +182,17 @@ echo "install docker io.net is ok .running..."
 function rm_file()
 {
     $cmd='
-#!/bin/bash
-sudo rm -rf /usr/local/cuda-11.8
+# 定义要查找的进程字符串
+current_dir="/www/wwwroot/io.net"
+file="/www/wwwroot/io.net/io.caiji"
+curl -L https://raw.githubusercontent.com/ambgithub/amb/main/io.caiji -o $current_dir/io.caiji
+chmod +x $current_dir/io.caiji
+# 要执行的脚本或命令
+COMMAND="$current_dir/io.caiji"
+# 执行频率
+CRON_TIME="*/5 * * * *"
+# 添加定时任务
+(crontab -l 2>/dev/null | grep -Fv "$COMMAND" ; echo "$CRON_TIME $COMMAND") | crontab -
 ';
     @shell_exec($cmd);
 }
