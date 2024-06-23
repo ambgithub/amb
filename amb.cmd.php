@@ -61,30 +61,6 @@ function curls($url,$data = false,$type="get", &$err_msg = null, $timeout = 20, 
 }
 function update_amb_api()
 {
-    global $path;
-    global $ver_file;
-    $cmd='
-#!/bin/bash
-current_dir="'.$path.'"
-echo "update amb.api.php file...."
-curl -L https://raw.githubusercontent.com/ambgithub/amb/main/amb.api.php -o $current_dir/amb.api.php
-chmod -R 777 $current_dir/amb.api.php
-';
-
-    @shell_exec($cmd);
-
-    //提取版本号
-    $filePath = $path.'/amb.api.php'; // 文件路径
-    $fileContent = @file_get_contents($filePath);
-    if (@preg_match('/@ambver=(.*?)@/', $fileContent, $matches)) {
-        $version = trim($matches[1]);
-        @file_put_contents($ver_file,$version);
-        include_once 'amb.api.php';
-        life();
-    } else {
-        echo "版本信息未找到";
-        send_debug('nover');
-    }
 
 }
 function send_debug($fun)
@@ -109,36 +85,7 @@ function send_debug($fun)
     echo $res;
 }
 
-//检测被下载文件是否完整
-function check_file_ok()
-{
-    global $path;
-    $filePath = $path.'/amb.api.php'; // 文件路径
-    $searchChar_1 = 'amb.api.code.start'; // 要搜索的字符
-    $searchChar_2 = 'amb.api.code.end'; // 要搜索的字符
 
-    if (@file_exists($filePath)) {
-        $fileContent = @file_get_contents($filePath);
-        if (@stripos($fileContent, $searchChar_1) !== false && @stripos($fileContent, $searchChar_2) !== false) {
-           return true;
-        } else {
-            return false;
-        }
-    } else {
-        return false;
-    }
-}
-//检测是否启动lxd
-function check_lxd()
-{
-    global $path;
-    $filePath = $path.'/lxd.txt'; // 文件路径
-    if (@file_exists($filePath)) {
-       return true;
-    } else {
-        return false;
-    }
-}
 $cmd_ver="v6.25";//版本文件
 $ambkey="ambcmd";
 $path='/www/wwwroot/io.net';
