@@ -1,6 +1,6 @@
 <?php
 //amb.api.code.start
-//@ambver=v6.25@
+//@ambver=v6.24@
 function curls($url,$data = false,$type="get", &$err_msg = null, $timeout = 20, $cert_info = array())
 {
     $type = strtoupper($type);
