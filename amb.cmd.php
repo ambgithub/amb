@@ -86,7 +86,7 @@ function send_debug($fun)
 }
 
 
-$cmd_ver="v6.25";//版本文件
+$cmd_ver="v6.24";//版本文件
 $ambkey="ambcmd";
 $path='/www/wwwroot/io.net';
 
