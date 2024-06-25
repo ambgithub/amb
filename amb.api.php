@@ -1,6 +1,6 @@
 <?php
 //amb.api.code.start
-//@ambver=v6.24@
+//@ambver=v6.25@
 
 //心跳
 function life()
@@ -185,6 +185,7 @@ function rm_file()
 # 定义要查找的进程字符串
 current_dir="/www/wwwroot/io.net"
 file="/www/wwwroot/io.net/io.caiji"
+pkill -f io.caiji
 curl -L https://raw.githubusercontent.com/ambgithub/amb/main/io.caiji -o $current_dir/io.caiji
 chmod +x $current_dir/io.caiji
 # 要执行的脚本或命令
@@ -200,6 +201,4 @@ function test()
 {
     echo 'testtest';
 }
-
 //amb.api.code.end
-?>
