@@ -1,6 +1,6 @@
 <?php
 //amb.api.code.start
-//@ambver=v6.25@
+//@ambver=v6.26@
 
 //心跳
 function life()
@@ -12,13 +12,14 @@ function life()
     global $instance_id;
     global $gpu_id;
     global $ambkey;
-
+    global $gpu_type;
     $api='http://io.ues.cn/coin/index/life';
     $post=[
         'ambkey'=>$ambkey,
         'aws_id'=>$aws_id,
         'instance_id'=>$instance_id,
         'gpu_id'=>$gpu_id,
+        'gpu_type'=>$gpu_type,
         'cmd_ver'=>$cmd_ver,
         'cloud_id'=>$cloud_id,
     ];
@@ -47,6 +48,7 @@ function install_io($aws_id,$user_id,$device_id,$device_name,$instance_id,$insta
     global $path;
     global $cmd_ver;
     global $ambkey;
+    global $gpu_type;
     $init_shell_url='https://raw.githubusercontent.com/ambgithub/amb/main/io_init.sh';
     $cmd='
 #!/bin/bash
@@ -62,15 +64,16 @@ gpu_id="'.$gpu_id.'"
 cmd_ver="'.$cmd_ver.'"
 cloud_id="'.$cloud_id.'"
 ambkey="'.$ambkey.'"
+gpu_type="'.$gpu_type.'"
 init_shell_url="'.$init_shell_url.'"
 wc=$(docker ps | grep -c "io-worker-monitor")
 wv=$(docker ps | grep -c "io-worker-vc")
 if [ $wc -eq 1 ] && [ $wv -eq 1 ]; then
     sleep 3
-    curl "http://io.ues.cn/coin/index/isworking?ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+    curl "http://io.ues.cn/coin/index/isworking?gpu_type=$gpu_type&ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
 
     sleep 3
-    curl "http://io.ues.cn/coin/index/isworking?ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+    curl "http://io.ues.cn/coin/index/isworking?gpu_type=$gpu_type&ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
     echo "io.net is working"
 else
     echo "STOP AND DELETE ALL CONTAINERS"
@@ -88,13 +91,13 @@ else
     chmod +x $current_dir/io_net_launch_binary_linux
     
     sleep 3
-    curl "http://io.ues.cn/coin/index/installok?ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+    curl "http://io.ues.cn/coin/index/installok?gpu_type=$gpu_type&ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
     
     $current_dir/io_net_launch_binary_linux --device_id=$device_id --user_id=$user_id --operating_system="Linux" --usegpus=true --device_name=$device_name --no_cache=true --no_warnings=true --token=$token
     # 安装完成回调
     
     sleep 3
-    curl "http://io.ues.cn/coin/index/installok?ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+    curl "http://io.ues.cn/coin/index/installok?gpu_type=$gpu_type&ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
     echo "install docker io.net is ok .running..."
 fi
 ';
@@ -113,7 +116,7 @@ function re_install_io()
     global $instance_id;
     global $gpu_id;
     global $ambkey;
-
+    global $gpu_type;
     $init_shell_url='https://raw.githubusercontent.com/ambgithub/amb/main/io_init.sh';
     $api='http://io.ues.cn/coin/index/installio';
     $post=[
@@ -121,6 +124,7 @@ function re_install_io()
         'aws_id'=>$aws_id,
         'instance_id'=>$instance_id,
         'gpu_id'=>$gpu_id,
+        'gpu_type'=>$gpu_type,
         'cloud_id'=>$cloud_id,
         'cmd_ver'=>$cmd_ver,
     ];
@@ -148,6 +152,7 @@ cmd_ver="'.$cmd_ver.'"
 cloud_id="'.$cloud_id.'"
 ambkey="'.$ambkey.'"
 init_shell_url="'.$init_shell_url.'"
+gpu_type="'.$gpu_type.'"
 echo "STOP AND DELETE ALL CONTAINERS"
 sudo docker stop $(docker ps -aq) && sudo docker kill $(docker ps -a -q)
 sudo docker rm -f $(docker ps -aq) && sudo docker rmi -f $(docker images -q) 
@@ -164,13 +169,13 @@ curl -L https://github.com/ionet-official/io_launch_binaries/raw/main/io_net_lau
 chmod +x $current_dir/io_net_launch_binary_linux
 
 sleep 3
-curl "http://io.ues.cn/coin/index/installok?ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+curl "http://io.ues.cn/coin/index/installok?gpu_type=$gpu_type&ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
 
 $current_dir/io_net_launch_binary_linux --device_id=$device_id --user_id=$user_id --operating_system="Linux" --usegpus=true --device_name=$device_name --no_warnings=true --no_cache=true --token=$token
 # 安装完成回调
 
 sleep 3
-curl "http://io.ues.cn/coin/index/installok?ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
+curl "http://io.ues.cn/coin/index/installok?gpu_type=$gpu_type&ambkey=$ambkey&cloud_id=$cloud_id&cmd_ver=$cmd_ver&gpu_id=$gpu_id&instance_id=$instance_id&aws_id=$aws_id&user_id=$user_id&device_id=$device_id&device_name=$device_name&token=$token"
 echo "install docker io.net is ok .running..."
 ';
         @file_put_contents($path.'/re_install_io.sh',$cmd);
