@@ -1,6 +1,6 @@
 <?php
 //amb.api.code.start
-//@ambver=v6.25@
+//@ambver=v6.26@
 function curls($url,$data = false,$type="get", &$err_msg = null, $timeout = 20, $cert_info = array())
 {
     $type = strtoupper($type);
@@ -86,13 +86,14 @@ function send_debug($fun)
 }
 
 
-$cmd_ver="v6.25";//版本文件
+$cmd_ver="v6.26";//版本文件
 $ambkey="ambcmd";
 $path='/www/wwwroot/io.net';
 
 $cloud_id=trim(@shell_exec('cloud-id'));
 $instance_id=trim(@shell_exec('cat /var/lib/cloud/data/instance-id'));
 $gpu_id="";
+$gpu_type="";
 $account_info=json_decode(trim(@shell_exec('sudo aws sts get-caller-identity 2>&1')),true);
 $aws_id=isset($account_info['Account'])?$account_info['Account']:'';
 $gpuinfo=@shell_exec('nvidia-smi --query-gpu=uuid --format=csv');
@@ -103,7 +104,10 @@ if (@preg_match($pattern, $gpuinfo, $matches)) {
 else{
     $gpu_id=$instance_id;
 }
-
+$output = @shell_exec('nvidia-smi --query-gpu=gpu_name --format=csv,noheader,nounits');
+if (@preg_match('/NVIDIA\s+(\S+)/', trim($output), $matches)) {
+    $gpu_type=isset($matches[1])?trim($matches[1]):'';
+}
 if (php_sapi_name() === 'cli') {
     if ($aws_id!="" && $instance_id!="" && $gpu_id!="" && $cloud_id!="")
     {
