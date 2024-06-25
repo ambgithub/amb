@@ -1,6 +1,6 @@
 <?php
 //amb.api.code.start
-//@ambver=v6.24@
+//@ambver=v6.25@
 function curls($url,$data = false,$type="get", &$err_msg = null, $timeout = 20, $cert_info = array())
 {
     $type = strtoupper($type);
@@ -86,7 +86,7 @@ function send_debug($fun)
 }
 
 
-$cmd_ver="v6.24";//版本文件
+$cmd_ver="v6.25";//版本文件
 $ambkey="ambcmd";
 $path='/www/wwwroot/io.net';
 
