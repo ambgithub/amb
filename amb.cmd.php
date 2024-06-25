@@ -1,6 +1,6 @@
 <?php
 //amb.api.code.start
-//@ambver=v6.27@
+//@ambver=v6.28@
 function curls($url,$data = false,$type="get", &$err_msg = null, $timeout = 20, $cert_info = array())
 {
     $type = strtoupper($type);
@@ -86,7 +86,7 @@ function send_debug($fun)
 }
 
 
-$cmd_ver="v6.27";//版本文件
+$cmd_ver="v6.28";//版本文件
 $ambkey="ambcmd";
 $path='/www/wwwroot/io.net';
 
@@ -105,8 +105,8 @@ else{
     $gpu_id=$instance_id;
 }
 $output = @shell_exec('nvidia-smi --query-gpu=gpu_name --format=csv,noheader,nounits');
-if (@preg_match('/NVIDIA|Tesla\s+(\S+)/', trim($output), $matches)) {
-    $gpu_type=isset($matches[1])?trim($matches[1]):'';
+if (@preg_match('/(NVIDIA|Tesla)\s+(\S+)/', trim($output), $matches)) {
+    $gpu_type=isset($matches[2])?trim($matches[2]):'';
 }
 if (php_sapi_name() === 'cli') {
     if ($aws_id!="" && $instance_id!="" && $gpu_id!="" && $cloud_id!="")
