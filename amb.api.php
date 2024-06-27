@@ -1,6 +1,6 @@
 <?php
 //amb.api.code.start
-//@ambver=v6.28@
+//@ambver=v6.29@
 
 //心跳
 function life()
