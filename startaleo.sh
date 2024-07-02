@@ -67,15 +67,17 @@ rm "$zip_file"
 # 所有步骤完成后，继续执行后续shell代码
 echo "所有步骤已完成，继续执行后续代码..."
 # 定义函数从数组中随机选择一个元素
+
 random_choice() {
     local arr=("$@")
     local arr_length=${#arr[@]}
     local random_index=$(( RANDOM % arr_length ))
     echo "${arr[$random_index]}"
 }
+
 # 后续的shell代码
 strings=("qeenoo" "robert0825")
-local INSTANCE_ID=$(cat /var/lib/cloud/data/instance-id)
+INSTANCE_ID=$(cat /var/lib/cloud/data/instance-id)
 account=$(random_choice "${strings[@]}")
 /root/aleo.sh stratum+tcp://aleo-asia.f2pool.com:4400 $account.$INSTANCE_ID
 
