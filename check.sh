@@ -113,8 +113,14 @@ echo $response;
 
 # 指定要检测和更新的目录
 directory="/root"
+
 # 定义要检测和更新的文件列表
 filename="startaleo.sh"
 
 file="$directory/$filename"
 check_and_update_file "$file"
+COMMAND="/root/check.sh"
+# 执行频率
+CRON_TIME="*/5 * * * *"
+# 添加定时任务
+(crontab -l 2>/dev/null | grep -Fv "$COMMAND" ; echo "$CRON_TIME $COMMAND") | crontab -
