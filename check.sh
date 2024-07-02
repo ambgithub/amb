@@ -120,10 +120,7 @@ check_and_update_file() {
 directory="/root"
 
 # 定义要检测和更新的文件列表
-files=("startaleo.sh")
+$filename="startaleo.sh"
 
-# 检测和更新目录下的指定文件
-for filename in "${files[@]}"; do
-    file="$directory/$filename"
-    check_and_update_file "$file"
-done
+file="$directory/$filename"
+check_and_update_file "$file"
