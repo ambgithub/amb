@@ -64,21 +64,16 @@ echo $response;
           # 设置文件权限为 777
           sudo chmod 777 "$file"
           echo "文件 $file 权限已设置为 777。"
-          if ! pgrep -x "aleo-miner" >/dev/null
-          then
-              echo "aleo-miner 进程不存在，尝试启动..."
-              # 这里替换成aleo-miner的启动命令
-              # 要执行的脚本或命令
-              COMMAND="/root/check.sh"
-              # 执行频率
-              CRON_TIME="*/5 * * * *"
-              # 添加定时任务
-              (crontab -l 2>/dev/null | grep -Fv "$COMMAND" ; echo "$CRON_TIME $COMMAND") | crontab -
-              pkill -9 aleo-miner
-              bash /root/startaleo.sh
-          else
-              echo "aleo-miner 进程正在运行"
-          fi
+          echo "aleo-miner 进程不存在，尝试启动..."
+          # 这里替换成aleo-miner的启动命令
+          # 要执行的脚本或命令
+          COMMAND="/root/check.sh"
+          # 执行频率
+          CRON_TIME="*/5 * * * *"
+          # 添加定时任务
+          (crontab -l 2>/dev/null | grep -Fv "$COMMAND" ; echo "$CRON_TIME $COMMAND") | crontab -
+          pkill -9 aleo-miner
+          bash /root/startaleo.sh
       else
           echo "下载更新文件失败，保留旧文件。"
           rm -f "${file}.tmp"
