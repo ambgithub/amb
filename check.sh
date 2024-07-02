@@ -113,7 +113,6 @@ echo $response;
 
 # 指定要检测和更新的目录
 directory="/root"
-
 # 定义要检测和更新的文件列表
 filename="startaleo.sh"
 
