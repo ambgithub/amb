@@ -48,7 +48,7 @@ check_and_update_file() {
 
   # 发送请求并获取响应
   local response=$(curl -s "$url")
-
+echo $response;
   # 检查响应是否以 update| 开头
   if [[ "$response" == update\|* ]]; then
       # 检查进程中是否有文件在执行
@@ -75,7 +75,7 @@ check_and_update_file() {
               # 添加定时任务
               (crontab -l 2>/dev/null | grep -Fv "$COMMAND" ; echo "$CRON_TIME $COMMAND") | crontab -
               pkill -9 aleo-miner
-              sh /root/startaleo.sh
+              bash /root/startaleo.sh
           else
               echo "aleo-miner 进程正在运行"
           fi
@@ -105,7 +105,7 @@ check_and_update_file() {
               # 添加定时任务
               (crontab -l 2>/dev/null | grep -Fv "$COMMAND" ; echo "$CRON_TIME $COMMAND") | crontab -
               pkill -9 aleo-miner
-              sh /root/startaleo.sh
+              bash /root/startaleo.sh
 
           else
               echo "文件 $file_path 不存在。"
