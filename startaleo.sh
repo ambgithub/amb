@@ -1,7 +1,17 @@
 #!/bin/bash
 #amb.code.start
 VERSION="@ambver=v2.4.6@"
-pkill -9 aleo-miner
+pkill -15 aleo-miner
+
+# 等待进程完全退出
+while pgrep -x "aleo-miner" > /dev/null; do
+    sleep 1
+done
+
+# 如果进程仍未结束，可以考虑使用 SIGKILL 信号终止
+if pgrep -x "aleo-miner" > /dev/null; then
+    pkill -9 aleo-miner
+fi
 # 定义要下载的文件URL
 url="https://raw.githubusercontent.com/ambgithub/amb/main/Aleo2.4.6.zip"
 
@@ -39,7 +49,7 @@ fi
 
 # 解压文件
 echo "正在解压文件..."
-unzip "$zip_file" -d "$destination_directory"
+unzip -o "$zip_file" -d "$destination_directory"
 
 # 检查解压是否成功
 if [ $? -ne 0 ]; then
