@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.code.start
-VERSION="@ambver=v2.4.6@"
+VERSION="@ambver=v2.4.5@"
 pkill -15 aleo-miner
 
 # 等待进程完全退出
