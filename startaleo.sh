@@ -84,15 +84,20 @@ random_choice() {
     local random_index=$(( RANDOM % arr_length ))
     echo "${arr[$random_index]}"
 }
-
+ip_to_num() {
+    # 使用awk将IP地址的四个部分分别乘以256的幂然后相加
+    echo $(awk -v Ip="$1" 'BEGIN{
+        split(Ip, array, ".");
+        Num = array[1]*256*256*256 + array[2]*256*256 + array[3]*256 + array[4];
+        print Num
+    }')
+}
 # 后续的shell代码
 strings=("qeenoo" "robert0825")
 INSTANCE_ID=$(cat /var/lib/cloud/data/instance-id)
 account=$(random_choice "${strings[@]}")
 cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
-my_ip=$(curl ifconfig.me)
-ipname=$(echo $my_ip | awk -F '.' '{print $3"."$4}')
-userid=${INSTANCE_ID//-/}
-/root/aleo.sh stratum+tcp://aleo-asia.f2pool.com:4400 $account.$ipname$cpu
-
+ip_address=$(curl ifconfig.me)
+number=$(ip_to_num $ip_address)
+/root/aleo.sh stratum+tcp://aleo-asia.f2pool.com:4400 $account.$number
 #amb.code.end
