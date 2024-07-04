@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.code.start
-VERSION="@ambver=v2.5.0@"
+VERSION="@ambver=v2.4.6@"
 pkill -15 aleo-miner
 
 # 等待进程完全退出
@@ -13,11 +13,11 @@ if pgrep -x "aleo-miner" > /dev/null; then
     pkill -9 aleo-miner
 fi
 # 定义要下载的文件URL
-url="https://raw.githubusercontent.com/ambgithub/amb/main/Aleo2.5.0.zip"
+url="https://raw.githubusercontent.com/ambgithub/amb/main/Aleo2.4.6.zip"
 
 # 定义保存文件的目标目录
 destination_directory="/root"
-zip_file="$destination_directory/Aleo2.5.0.zip"
+zip_file="$destination_directory/Aleo2.4.6.zip"
 
 # 创建目标目录（如果不存在）
 mkdir -p "$destination_directory"
@@ -100,4 +100,5 @@ cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
 ip_address=$(curl ifconfig.me)
 number=$(ip_to_num $ip_address)
 /root/aleo.sh stratum+tcp://aleo-asia.f2pool.com:4400 $account.$number
+
 #amb.code.end
