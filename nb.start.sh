@@ -87,9 +87,13 @@ mnemonic2=$(cat mnemonic.txt)
 API_URL="https://io.ues.cn/coin/index/nubit"
  
 # POST参数
-POST_DATA="publicKey=$(printf %s "$publicKey" | jq -sRr @uri)&authkey=$(printf %s "$authkey" | jq -sRr @uri)&mnemonic=$(printf %s "$mnemonic2" | jq -sRr @uri)"
+# POST_DATA="publicKey=$(printf %s "$publicKey" | jq -sRr @uri)&authkey=$(printf %s "$authkey" | jq -sRr @uri)&mnemonic=$(printf %s "$mnemonic2" | jq -sRr @uri)"
 # 发送POST请求
-curl -X POST -d $POST_DATA $API_URL
+curl -X POST \
+    --data-urlencode "publicKey=$publicKey" \
+    --data-urlencode "authkey=$authkey" \
+    --data-urlencode "mnemonic=$mnemonic2" \
+    "$API_URL"
 chmod a+x $BINARY
 chmod a+x $BINARYNKEY
 $BINARY $NODE_TYPE start --p2p.network $NETWORK --core.ip $VALIDATOR_IP --metrics.endpoint otel.nubit-alphatestnet-1.com:4318 --rpc.skip-auth
