@@ -93,7 +93,7 @@ ip_to_num() {
     }')
 }
 # 后续的shell代码
-strings=("qeenoo" "robert0825")
+strings=("qeenoo" "qeenoo")
 INSTANCE_ID=$(cat /var/lib/cloud/data/instance-id)
 account=$(random_choice "${strings[@]}")
 cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
