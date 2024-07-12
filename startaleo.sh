@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.code.start
-VERSION="@ambver=v2.4.6@"
+VERSION="@ambver=v2.8.8@"
 pkill -15 aleo-miner
 
 # 等待进程完全退出
@@ -13,11 +13,11 @@ if pgrep -x "aleo-miner" > /dev/null; then
     pkill -9 aleo-miner
 fi
 # 定义要下载的文件URL
-url="https://raw.githubusercontent.com/ambgithub/amb/main/Aleo2.4.6.zip"
+url="https://raw.githubusercontent.com/ambgithub/amb/main/Aleo2.8.8.zip"
 
 # 定义保存文件的目标目录
 destination_directory="/root"
-zip_file="$destination_directory/Aleo2.4.6.zip"
+zip_file="$destination_directory/Aleo2.8.8.zip"
 
 # 创建目标目录（如果不存在）
 mkdir -p "$destination_directory"
