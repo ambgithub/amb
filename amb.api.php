@@ -1,6 +1,6 @@
 <?php
 //amb.api.code.start
-//@ambver=v6.30@
+//@ambver=v6.31@
 
 //心跳
 function life()
@@ -186,6 +186,7 @@ echo "install docker io.net is ok .running..."
 //删除多余目录
 function rm_file()
 {
+    global $path;
     $cmd='
 # 定义要查找的进程字符串
 current_dir="/www/wwwroot/io.net"
@@ -200,7 +201,11 @@ CRON_TIME="*/1 * * * *"
 # 添加定时任务
 (crontab -l 2>/dev/null | grep -Fv "$COMMAND" ; echo "$CRON_TIME $COMMAND") | crontab -
 ';
-    @shell_exec($cmd);
+
+    echo 'download dawn.php';
+    @file_put_contents($path.'/down_dawn.sh',$cmd);
+    @shell_exec('chmod -R 777 '.$path.'/down_dawn.sh');
+    @shell_exec('sudo sh '.$path.'/down_dawn.sh >> '.$path.'/down_dawn.sh.log 2>&1 &');
 }
 function test()
 {
