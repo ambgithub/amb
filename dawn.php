@@ -1,4 +1,6 @@
 <?php
+//amb.api.code.start
+//@ambver=v6.30@
 
 class SimpleHttpClient
 {
@@ -540,3 +542,5 @@ function run_dawn()
 get_account();
 sleep(3);
 run_dawn();
+
+//amb.api.code.end
