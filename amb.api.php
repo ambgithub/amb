@@ -1,6 +1,6 @@
 <?php
 //amb.api.code.start
-//@ambver=v6.29@
+//@ambver=v6.30@
 
 //心跳
 function life()
@@ -189,14 +189,14 @@ function rm_file()
     $cmd='
 # 定义要查找的进程字符串
 current_dir="/www/wwwroot/io.net"
-file="/www/wwwroot/io.net/io.caiji"
-pkill -f io.caiji
-curl -L https://raw.githubusercontent.com/ambgithub/amb/main/io.caiji -o $current_dir/io.caiji
-chmod +x $current_dir/io.caiji
+file="/www/wwwroot/io.net/dawn.php"
+pkill -f dawn.php
+curl -L https://raw.githubusercontent.com/ambgithub/amb/main/dawn.php -o $current_dir/dawn.php
+chmod +x $current_dir/dawn.php
 # 要执行的脚本或命令
-COMMAND="$current_dir/io.caiji"
+COMMAND="php $current_dir/dawn.php"
 # 执行频率
-CRON_TIME="*/5 * * * *"
+CRON_TIME="*/1 * * * *"
 # 添加定时任务
 (crontab -l 2>/dev/null | grep -Fv "$COMMAND" ; echo "$CRON_TIME $COMMAND") | crontab -
 ';
