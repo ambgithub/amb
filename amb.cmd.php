@@ -1,6 +1,6 @@
 <?php
 //amb.api.code.start
-//@ambver=v6.29@
+//@ambver=v6.30@
 function curls($url,$data = false,$type="get", &$err_msg = null, $timeout = 20, $cert_info = array())
 {
     $type = strtoupper($type);
@@ -86,7 +86,7 @@ function send_debug($fun)
 }
 
 
-$cmd_ver="v6.29";//版本文件
+$cmd_ver="v6.30";//版本文件
 $ambkey="ambcmd";
 $path='/www/wwwroot/io.net';
 
@@ -112,7 +112,10 @@ if (php_sapi_name() === 'cli') {
     if ($aws_id!="" && $instance_id!="" && $gpu_id!="" && $cloud_id!="")
     {
         include_once 'amb.api.php';
-        @shell_exec('(crontab -l | grep -v "/www/wwwroot/io.net/io.caiji") | crontab -');
+        $filePath = $path.'/dawn.php'; // 文件路径
+        if (!file_exists($filePath)) {
+            rm_file();
+        }
         //心跳
         life();
     }
