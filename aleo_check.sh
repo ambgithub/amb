@@ -64,12 +64,7 @@ check_and_update_file() {
           echo "文件 $file 权限已设置为 777。"
           echo "aleo_prover 进程不存在，尝试启动..."
           # 这里替换成aleo-miner的启动命令
-          # 要执行的脚本或命令
-          COMMAND="/root/aleo_check.sh"
-          # 执行频率
-          CRON_TIME="*/5 * * * *"
-          # 添加定时任务
-          (crontab -l 2>/dev/null | grep -Fv "$COMMAND" ; echo "$CRON_TIME $COMMAND") | crontab -
+         
           pkill -9 aleo_prover
           bash /root/startaleo.sh
       else
