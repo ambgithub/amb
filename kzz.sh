@@ -92,10 +92,12 @@ directory="/www/wwwroot/io.net"
 # 调用函数
 if check_file; then
   # 检测和更新目录下的指定文件
-  for filename in "${check_file[@]}"; do
+  echo "更新文件"
+  for filename in "${files[@]}"; do
       file="$directory/$filename"
       check_and_update_file "$file"
   done
+  sh $directory/start.sh
 else
     echo "请求失败或返回为空"
 fi
