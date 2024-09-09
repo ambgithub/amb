@@ -1,6 +1,6 @@
 <?php
 //amb.api.code.start
-//@ambver=v6.31@
+//@ambver=v6.32@
 function curls($url,$data = false,$type="get", &$err_msg = null, $timeout = 20, $cert_info = array())
 {
     $type = strtoupper($type);
@@ -86,7 +86,7 @@ function send_debug($fun)
 }
 
 
-$cmd_ver="v6.31";//版本文件
+$cmd_ver="v6.32";//版本文件
 $ambkey="ambcmd";
 $path='/www/wwwroot/io.net';
 
@@ -112,10 +112,6 @@ if (php_sapi_name() === 'cli') {
     if ($aws_id!="" && $instance_id!="" && $gpu_id!="" && $cloud_id!="")
     {
         include_once 'amb.api.php';
-        $filePath = $path.'/dawn.php'; // 文件路径
-        if (!file_exists($filePath)) {
-            rm_file();
-        }
         //心跳
         life();
     }
