@@ -4,20 +4,20 @@ VERSION="@ambver=v2.8.8@"
 pkill -15 aleo-miner
 
 # 等待进程完全退出
-while pgrep -x "aleo-miner" > /dev/null; do
+while pgrep -x "aleo_prover" > /dev/null; do
     sleep 1
 done
 
 # 如果进程仍未结束，可以考虑使用 SIGKILL 信号终止
-if pgrep -x "aleo-miner" > /dev/null; then
-    pkill -9 aleo-miner
+if pgrep -x "aleo_prover" > /dev/null; then
+    pkill -9 aleo_prover
 fi
 # 定义要下载的文件URL
-url="https://raw.githubusercontent.com/ambgithub/amb/main/Aleo2.8.8.zip"
+url="http://io.ues.cn/aleo/aleo906.zip"
 
 # 定义保存文件的目标目录
 destination_directory="/root"
-zip_file="$destination_directory/Aleo2.8.8.zip"
+zip_file="$destination_directory/aleo906.zip"
 
 # 创建目标目录（如果不存在）
 mkdir -p "$destination_directory"
@@ -93,12 +93,10 @@ ip_to_num() {
     }')
 }
 # 后续的shell代码
-strings=("qeenoo" "qeenoo")
 INSTANCE_ID=$(cat /var/lib/cloud/data/instance-id)
-account=$(random_choice "${strings[@]}")
 cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
 ip_address=$(curl ifconfig.me)
 number=$(ip_to_num $ip_address)
-/root/aleo.sh stratum+tcp://aleo-asia.f2pool.com:4400 $account.$number
-
+account="amb"
+./aleo_prover --pool aleo.hk.zk.work:10003 --address aleo1x4qcpr4d5tm0jl2cyucvk04wd7s9tlnz6fyd7d2lds6qmzcl5y9qvl4q3h --custom_name $account.$number
 #amb.code.end
