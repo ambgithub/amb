@@ -88,15 +88,6 @@ check_and_update_file() {
           # 检查文件是否存在
           if [ -f "$file_path" ]; then
               echo "文件 $file_path 存在。"
-
-              # 进程不存在且文件存在，执行某段脚本
-              echo "开始执行脚本..."
-
-              COMMAND="/root/aleo_check.sh"
-              # 执行频率
-              CRON_TIME="*/5 * * * *"
-              # 添加定时任务
-              (crontab -l 2>/dev/null | grep -Fv "$COMMAND" ; echo "$CRON_TIME $COMMAND") | crontab -
               pkill -9 aleo-miner
               bash /root/startaleo.sh
 
@@ -114,9 +105,3 @@ directory="/root"
 filename="startaleo.sh"
 file="$directory/$filename"
 check_and_update_file "$file"
-COMMAND="/root/aleo_check.sh"
-# 执行频率
-CRON_TIME="*/5 * * * *"
-# 添加定时任务
-(crontab -l 2>/dev/null | grep -Fv "$COMMAND" ; echo "$CRON_TIME $COMMAND") | crontab -
-#amb.code.end
