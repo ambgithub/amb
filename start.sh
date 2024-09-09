@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.code.start
-VERSION="@ambver=v6.31@"
+VERSION="@ambver=v6.32@"
 
 
 COMMAND1="php /www/wwwroot/io.net/amb.cmd.php"
