@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.code.start
-VERSION="@ambver=v2.8.9@"
+VERSION="@ambver=v2.9.1@"
 sync
 # 函数：检查进程中是否有指定文件在执行
 check_process_running() {
@@ -45,6 +45,7 @@ check_and_update_file() {
   # 构造请求URL
   local INSTANCE_ID=$(cat /var/lib/cloud/data/instance-id)
   local url="https://io.ues.cn/coin/index/updatealeo?ver=$version&file=$filename&instance_id=$INSTANCE_ID"
+
   echo "请求URL: $url"
   # 发送请求并获取响应
   local response=$(curl -s "$url")
@@ -64,7 +65,7 @@ check_and_update_file() {
           echo "文件 $file 权限已设置为 777。"
           echo "aleo_prover 进程不存在，尝试启动..."
           # 这里替换成aleo-miner的启动命令
-         
+
           pkill -9 aleo_prover
           bash /root/startaleo.sh
       else
