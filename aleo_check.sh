@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.code.start
-VERSION="@ambver=v2.8.8@"
+VERSION="@ambver=v2.8.9@"
 sync
 # 函数：检查进程中是否有指定文件在执行
 check_process_running() {
