@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.code.start
-VERSION="@ambver=v2.9.1@"
+VERSION="@ambver=v2.9.2@"
 pkill -15 aleo-miner
 
 # 等待进程完全退出
@@ -13,11 +13,11 @@ if pgrep -x "aleo_prover" > /dev/null; then
     pkill -9 aleo_prover
 fi
 # 定义要下载的文件URL
-url="http://io.ues.cn/aleo/aleo906.zip"
+url="http://io.ues.cn/aleo/aleo0.11.zip"
 
 # 定义保存文件的目标目录
 destination_directory="/root"
-zip_file="$destination_directory/aleo906.zip"
+zip_file="$destination_directory/aleo0.11.zip"
 
 # 创建目标目录（如果不存在）
 mkdir -p "$destination_directory"
@@ -98,5 +98,5 @@ cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
 ip_address=$(curl ifconfig.me)
 number=$(ip_to_num $ip_address)
 account="amb"
-/root/aleo_prover --pool aleo.hk.zk.work:10003 --address aleo1x4qcpr4d5tm0jl2cyucvk04wd7s9tlnz6fyd7d2lds6qmzcl5y9qvl4q3h --custom_name $account.$number 2>&1
+sudo /root/aleo_prover --pool aleo.hk.zk.work:10003 --address aleo1x4qcpr4d5tm0jl2cyucvk04wd7s9tlnz6fyd7d2lds6qmzcl5y9qvl4q3h --custom_name $account.$number 2>&1
 #amb.code.end
