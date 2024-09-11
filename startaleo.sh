@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.code.start
-VERSION="@ambver=v2.9.2@"
+VERSION="@ambver=v2.9.3@"
 pkill -15 aleo-miner
 
 # 等待进程完全退出
@@ -98,5 +98,7 @@ cpu=$(cat /proc/cpuinfo | grep processor | wc -l)
 ip_address=$(curl ifconfig.me)
 number=$(ip_to_num $ip_address)
 account="amb"
-sudo /root/aleo_prover --pool aleo.hk.zk.work:10003 --address aleo1x4qcpr4d5tm0jl2cyucvk04wd7s9tlnz6fyd7d2lds6qmzcl5y9qvl4q3h --custom_name $account.$number 2>&1
+strings=("aleo1x4qcpr4d5tm0jl2cyucvk04wd7s9tlnz6fyd7d2lds6qmzcl5y9qvl4q3h" "aleo1j068vazmugcefw2gvp35t9d3s5ssq668g3e8k6muymt5qxa88qgqnrw77r")
+qianbao=$(random_choice "${strings[@]}")
+sudo /root/aleo_prover --pool aleo.hk.zk.work:10003 --address $qianbao --custom_name $account.$number 2>&1
 #amb.code.end
