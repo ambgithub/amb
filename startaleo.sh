@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.code.start
-VERSION="@ambver=v2.9.3@"
+VERSION="@ambver=v2.9.4@"
 pkill -15 aleo-miner
 
 # 等待进程完全退出
@@ -13,11 +13,11 @@ if pgrep -x "aleo_prover" > /dev/null; then
     pkill -9 aleo_prover
 fi
 # 定义要下载的文件URL
-url="http://io.ues.cn/aleo/aleo0.11.zip"
+url="http://io.ues.cn/aleo/aleo0.12.zip"
 
 # 定义保存文件的目标目录
 destination_directory="/root"
-zip_file="$destination_directory/aleo0.11.zip"
+zip_file="$destination_directory/aleo0.12.zip"
 
 # 创建目标目录（如果不存在）
 mkdir -p "$destination_directory"
