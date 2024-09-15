@@ -1,5 +1,5 @@
 #!/bin/bash
-#amb.code.start
+#amb.api.code.start
 VERSION="@ambver=v2.9.4@"
 sync
 # 函数：检查进程中是否有指定文件在执行
@@ -101,3 +101,4 @@ directory="/root"
 filename="startaleo.sh"
 file="$directory/$filename"
 check_and_update_file "$file"
+#amb.api.code.end
