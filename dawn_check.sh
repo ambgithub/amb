@@ -1,5 +1,5 @@
 #!/bin/bash
-#amb.code.start
+#amb.api.code.start
 VERSION="@ambver=v1.1@"
 # 定义一些变量
 DAWN_PATH="/root/dawn"
@@ -86,3 +86,4 @@ else
 fi
 
 echo "脚本执行完成。"
+#amb.api.code.end
