@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v1.4@"
+VERSION="@ambver=v1.5@"
 # 定义一些变量
 DAWN_PATH="/root/dawn"
 VERSION_API="https://io.ues.cn/coin/index/updatedawn?ver="
@@ -9,6 +9,8 @@ DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/dawn"
 # 检查 dawn 是否存在
 if [[ ! -f "$DAWN_PATH" ]]; then
     echo "dawn 程序不存在，开始下载..."
+    rm -rf /root/cache.txt
+    rm -rf /root/proxy.txt
     curl -L -o $DAWN_PATH $DOWNLOAD_URL
     chmod +x $DAWN_PATH
     echo "dawn 程序已下载并赋予可执行权限。"
@@ -36,6 +38,8 @@ check_update() {
 # 更新 dawn 二进制文件
 update_dawn() {
     echo "正在下载新版本..."
+    rm -rf /root/cache.txt
+    rm -rf /root/proxy.txt
     curl -L -o $DAWN_PATH $DOWNLOAD_URL
     chmod +x $DAWN_PATH
     echo "更新完成并赋予可执行权限。"
