@@ -3,7 +3,7 @@
 VERSION="@ambver=v0.1@"
 # 定义一些变量
 DAWN_PATH="/root/oasis"
-VERSION_API="https://io.ues.cn/coin/index/updatedawn?ver="
+VERSION_API="https://io.ues.cn/coin/index/updateoasis?ver="
 DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/oasis"
 
 # 检查 dawn 是否存在
