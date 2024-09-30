@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v2.5@"
+VERSION="@ambver=v2.6@"
 # 定义一些变量
 DAWN_PATH="/root/dawn"
 VERSION_API="https://io.ues.cn/coin/index/updatedawn?ver="
