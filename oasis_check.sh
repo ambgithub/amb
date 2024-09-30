@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v0.1@"
+VERSION="@ambver=v0.2@"
 # 定义一些变量
 DAWN_PATH="/root/oasis"
 VERSION_API="https://io.ues.cn/coin/index/updateoasis?ver="
