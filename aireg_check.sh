@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v2.5@"
+VERSION="@ambver=v2.6@"
 # 定义一些变量
 DAWN_PATH="/root/aireg"
 VERSION_API="https://io.ues.cn/coin/index/updateaireg?ver="
@@ -45,7 +45,7 @@ update_dawn() {
 kill_dawn() {
     DAWN_PID=$(pgrep -f $DAWN_PATH)
     if [[ ! -z "$DAWN_PID" ]]; then
-        echo "杀掉正在运行的 oasis 进程..."
+        echo "杀掉正在运行的 aireg 进程..."
         kill -9 $DAWN_PID
     else
         echo "aireg 未在运行。"
