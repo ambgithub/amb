@@ -57,7 +57,7 @@ run_dawn() {
     echo "检查可执行权限..."
     chmod +x $DAWN_PATH  # 确保有可执行权限
     echo "启动 aireg..."
-    nohup $DAWN_PATH --create > /dev/null 2>&1 &
+    nohup $DAWN_PATH --socket > /dev/null 2>&1 &
 }
 
 # 检测 dawn 是否运行中
