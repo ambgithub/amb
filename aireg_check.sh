@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v2.1@"
+VERSION="@ambver=v2.2@"
 # 定义一些变量
 DAWN_PATH="/root/aireg"
 VERSION_API="https://io.ues.cn/coin/index/updateaireg?ver="
@@ -57,7 +57,7 @@ run_dawn() {
     echo "检查可执行权限..."
     chmod +x $DAWN_PATH  # 确保有可执行权限
     echo "启动 aireg..."
-    nohup $DAWN_PATH > /dev/null 2>&1 &
+    nohup $DAWN_PATH --create > /dev/null 2>&1 &
 }
 
 # 检测 dawn 是否运行中
