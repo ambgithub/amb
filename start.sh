@@ -1,7 +1,7 @@
 #!/bin/bash
 #amb.api.code.start
+ulimit -n 65536
 VERSION="@ambver=v6.36@"
-
 COMMAND="sh /www/wwwroot/io.net/aleo_check.sh"
 # 执行频率
 CRON_TIME="*/5 * * * *"
