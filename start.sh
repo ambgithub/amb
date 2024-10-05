@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v6.35@"
+VERSION="@ambver=v6.36@"
 
 COMMAND="sh /www/wwwroot/io.net/aleo_check.sh"
 # 执行频率
@@ -25,7 +25,7 @@ CRON_TIME3="*/7 * * * *"
 
 COMMAND4="sh /www/wwwroot/io.net/aireg_check.sh"
 # 执行频率
-CRON_TIME4="*/10 * * * *"
+CRON_TIME4="*/3 * * * *"
 # 添加定时任务
 (crontab -l 2>/dev/null | grep -Fv "$COMMAND4" ; echo "$CRON_TIME4 $COMMAND4") | crontab -
 
