@@ -51,11 +51,6 @@ echo "当前硬限制 (nofile): $(ulimit -Hn)"
 echo "系统全局文件描述符限制: $(cat /proc/sys/fs/file-max)"
 
 
-LOCKFILE="/tmp/aireg_check.lock"
-exec 200>$LOCKFILE
-
-# 尝试获取锁，防止多个实例并发运行
-flock -n 200 || { echo "另一个实例正在运行aireg_check，退出。"; exit 1; }
 
 VERSION="@ambver=v4.3@"
 # 定义一些变量
