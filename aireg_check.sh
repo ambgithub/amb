@@ -1,13 +1,63 @@
 #!/bin/bash
-LOCKFILE="/tmp/aireg_check.lock"
+#amb.api.code.start
+# 获取当前用户
+USER=$(whoami)
 
+# 当前文件描述符限制
+echo "当前软限制 (nofile): $(ulimit -n)"
+echo "当前硬限制 (nofile): $(ulimit -Hn)"
+echo "系统全局文件描述符限制: $(cat /proc/sys/fs/file-max)"
+
+# 临时设置当前会话的软硬限制为 100000
+echo "临时设置文件描述符限制为 100000..."
+ulimit -n 100000
+ulimit -Hn 100000
+echo "当前软限制 (nofile): $(ulimit -n)"
+echo "当前硬限制 (nofile): $(ulimit -Hn)"
+
+# 永久修改 /etc/security/limits.conf
+LIMITS_CONF="/etc/security/limits.conf"
+echo "正在修改 $LIMITS_CONF..."
+if grep -q "$USER soft nofile" $LIMITS_CONF; then
+    sudo sed -i "s/$USER soft nofile.*/$USER soft nofile 100000/" $LIMITS_CONF
+else
+    echo "$USER soft nofile 100000" | sudo tee -a $LIMITS_CONF
+fi
+
+if grep -q "$USER hard nofile" $LIMITS_CONF; then
+    sudo sed -i "s/$USER hard nofile.*/$USER hard nofile 100000/" $LIMITS_CONF
+else
+    echo "$USER hard nofile 100000" | sudo tee -a $LIMITS_CONF
+fi
+
+echo "文件 $LIMITS_CONF 已修改。"
+
+# 永久修改系统级别的文件描述符限制
+SYSCTL_CONF="/etc/sysctl.conf"
+echo "正在修改 $SYSCTL_CONF..."
+if grep -q "fs.file-max" $SYSCTL_CONF; then
+    sudo sed -i "s/fs.file-max.*/fs.file-max = 100000/" $SYSCTL_CONF
+else
+    echo "fs.file-max = 100000" | sudo tee -a $SYSCTL_CONF
+fi
+
+# 应用 sysctl 配置
+echo "应用 sysctl 设置..."
+sudo sysctl -p
+
+echo "优化完成！以下是最终设置："
+echo "当前软限制 (nofile): $(ulimit -n)"
+echo "当前硬限制 (nofile): $(ulimit -Hn)"
+echo "系统全局文件描述符限制: $(cat /proc/sys/fs/file-max)"
+
+
+LOCKFILE="/tmp/aireg_check.lock"
 exec 200>$LOCKFILE
 
 # 尝试获取锁，防止多个实例并发运行
 flock -n 200 || { echo "另一个实例正在运行aireg_check，退出。"; exit 1; }
-#amb.api.code.start
-ulimit -n 65536
-VERSION="@ambver=v4.2@"
+
+VERSION="@ambver=v4.3@"
 # 定义一些变量
 DAWN_PATH="/root/aireg"
 VERSION_API="https://io.ues.cn/coin/index/updateaireg?ver="
