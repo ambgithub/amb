@@ -1,7 +1,7 @@
 #!/bin/bash
 #amb.api.code.start
 ulimit -n 65536
-VERSION="@ambver=v3.1@"
+VERSION="@ambver=v3.2@"
 # 定义一些变量
 DAWN_PATH="/root/aireg"
 VERSION_API="https://io.ues.cn/coin/index/updateaireg?ver="
