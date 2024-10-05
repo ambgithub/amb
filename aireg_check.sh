@@ -7,7 +7,7 @@ exec 200>$LOCKFILE
 flock -n 200 || { echo "另一个实例正在运行aireg_check，退出。"; exit 1; }
 #amb.api.code.start
 ulimit -n 65536
-VERSION="@ambver=v3.9@"
+VERSION="@ambver=v4.1@"
 # 定义一些变量
 DAWN_PATH="/root/aireg"
 VERSION_API="https://io.ues.cn/coin/index/updateaireg?ver="
