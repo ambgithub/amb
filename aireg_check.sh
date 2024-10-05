@@ -1,5 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
+ulimit -n 65536
 VERSION="@ambver=v3.1@"
 # 定义一些变量
 DAWN_PATH="/root/aireg"
