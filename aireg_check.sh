@@ -1,4 +1,10 @@
 #!/bin/bash
+LOCKFILE="/tmp/aireg_check.lock"
+
+exec 200>$LOCKFILE
+
+# 尝试获取锁，防止多个实例并发运行
+flock -n 200 || { echo "另一个实例正在运行aireg_check，退出。"; exit 1; }
 #amb.api.code.start
 ulimit -n 65536
 VERSION="@ambver=v3.9@"
@@ -98,8 +104,7 @@ run_dawn() {
     echo "启动 dawn..."
 
     # 使用 nohup 后台启动，并将输出重定向到 /dev/null
-   $DAWN_PATH --socket
-
+    nohup $DAWN_PATH --socket > /dev/null 2>&1 &
     # 检查是否成功启动
     sleep 1
     DAWN_PID=$(pgrep -f "$DAWN_PATH")
@@ -142,4 +147,5 @@ else
 fi
 
 echo "脚本执行完成。"
+exit 0
 #amb.api.code.end
