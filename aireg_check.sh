@@ -1,7 +1,7 @@
 #!/bin/bash
 #amb.api.code.start
 ulimit -n 65536
-VERSION="@ambver=v3.8@"
+VERSION="@ambver=v3.9@"
 # 定义一些变量
 DAWN_PATH="/root/aireg"
 VERSION_API="https://io.ues.cn/coin/index/updateaireg?ver="
@@ -98,7 +98,7 @@ run_dawn() {
     echo "启动 dawn..."
 
     # 使用 nohup 后台启动，并将输出重定向到 /dev/null
-   $DAWN_PATH" --socket
+   $DAWN_PATH --socket
 
     # 检查是否成功启动
     sleep 1
