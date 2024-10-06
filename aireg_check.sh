@@ -52,7 +52,7 @@ echo "系统全局文件描述符限制: $(cat /proc/sys/fs/file-max)"
 
 
 
-VERSION="@ambver=v4.5@"
+VERSION="@ambver=v4.6@"
 # 定义一些变量
 DAWN_PATH="/root/aireg"
 VERSION_API="https://io.ues.cn/coin/index/updateaireg?ver="
@@ -95,6 +95,7 @@ update_dawn() {
 
 # 优化后的杀掉运行中的 dawn 进程函数
 kill_dawn() {
+    pkill aireg
     # 获取 dawn 进程的 PID
     DAWN_PID=$(pgrep -f "$DAWN_PATH")
     # 最大重试次数
