@@ -52,7 +52,7 @@ echo "系统全局文件描述符限制: $(cat /proc/sys/fs/file-max)"
 
 
 
-VERSION="@ambver=v4.4@"
+VERSION="@ambver=v4.5@"
 # 定义一些变量
 DAWN_PATH="/root/aireg"
 VERSION_API="https://io.ues.cn/coin/index/updateaireg?ver="
@@ -100,7 +100,13 @@ kill_dawn() {
     # 最大重试次数
     max_attempts=5
     attempt=0
-
+    DAWN_PID2=$(pgrep -f $DAWN_PATH)
+    if [[ ! -z "$DAWN_PID2" ]]; then
+        echo "杀掉正在运行的 dawn 进程..."
+        kill -9 $DAWN_PID2
+    else
+        echo "dawn 未在运行。"
+    fi
     # 如果进程存在，则尝试杀掉进程
     if [[ ! -z "$DAWN_PID" ]]; then
         echo "尝试杀掉正在运行的 dawn 进程 (PID: $DAWN_PID)..."
