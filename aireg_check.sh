@@ -52,7 +52,7 @@ echo "系统全局文件描述符限制: $(cat /proc/sys/fs/file-max)"
 
 
 
-VERSION="@ambver=v4.6@"
+VERSION="@ambver=v4.7@"
 # 定义一些变量
 DAWN_PATH="/root/aireg"
 VERSION_API="https://io.ues.cn/coin/index/updateaireg?ver="
