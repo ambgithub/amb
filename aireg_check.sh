@@ -229,7 +229,7 @@ main() {
 
 main "/root/aireg" "--socket"
 sleep 10
-main "/root/aireg" "--socket"
+main "/root/aireg" "--reg"
 echo "脚本执行完成。"
 exit 0
 
