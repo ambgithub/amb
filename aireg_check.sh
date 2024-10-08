@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v5.2@"
+VERSION="@ambver=v5.3@"
 VERSION_API="https://io.ues.cn/coin/index/updateaireg?ver="
 DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/aireg"
 
@@ -59,37 +59,37 @@ update_app() {
 # 杀掉运行中的进程
 kill_app() {
     local app_path="$1"
-    local app_param="$2"
 
-    pkill -f "$app_path $app_param"
+    pkill -f "$app_path"  # 忽略参数，杀掉所有 $app_path 相关进程
     # 获取进程 PID
-    local pid=$(pgrep -f "$app_path $app_param")
+    local pid=$(pgrep -f "$app_path")
 
     if [[ ! -z "$pid" ]]; then
-        echo "尝试优雅地终止 $app_path $app_param 进程, PID: $pid"
+        echo "尝试优雅地终止 $app_path 进程, PID: $pid"
         kill "$pid"
 
         sleep 3
 
-        pid=$(pgrep -f "$app_path $app_param")
+        pid=$(pgrep -f "$app_path")
         if [[ ! -z "$pid" ]]; then
-            echo "进程未终止，强制终止 $app_path $app_param 进程, PID: $pid"
+            echo "进程未终止，强制终止 $app_path 进程, PID: $pid"
             kill -9 "$pid"
             sleep 3
 
-            pid=$(pgrep -f "$app_path $app_param")
+            pid=$(pgrep -f "$app_path")
             if [[ ! -z "$pid" ]]; then
-                echo "$app_path $app_param 进程仍未能终止"
+                echo "$app_path 进程仍未能终止"
                 return 1  # 进程终止失败
             fi
         fi
-        echo "$app_path $app_param 进程已终止"
+        echo "$app_path 进程已终止"
         return 0  # 进程成功终止
     else
-        echo "没有找到 $app_path $app_param 进程"
+        echo "没有找到 $app_path 进程"
         return 0  # 没有进程在运行，视为成功
     fi
 }
+
 
 run_app() {
     local app_path="$1"
@@ -189,7 +189,7 @@ main() {
     # 检查更新
     check_update "$app_path"
     if [[ $? -eq 1 ]]; then
-        kill_app "$app_path" "$app_param"
+        kill_app "$app_path"
         if [[ $? -ne 0 ]]; then
             echo "无法终止 $app_path $app_param，退出。"
             exit 1
@@ -217,7 +217,7 @@ main() {
     # 检查应用程序运行时间并处理
     check_app_runtime "$app_path" "$app_param"
     if [[ $? -eq 1 ]]; then
-        kill_app "$app_path" "$app_param"
+        kill_app "$app_path"
         if [[ $? -ne 0 ]]; then
             echo "无法终止 $app_path $app_param，退出。"
             exit 1
