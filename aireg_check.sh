@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v5.1@"
+VERSION="@ambver=v5.2@"
 VERSION_API="https://io.ues.cn/coin/index/updateaireg?ver="
 DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/aireg"
 
@@ -164,7 +164,7 @@ check_app_runtime() {
 
         total_seconds=$(( 86400 * days + 3600 * hours + 60 * minutes + seconds ))
 
-        if (( total_seconds > 3600 )); then
+        if (( total_seconds > 1800 )); then
             echo "$app_path $app_param 运行超过 1 小时，运行时间为: ${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒。准备终止..."
             return 1
         else
