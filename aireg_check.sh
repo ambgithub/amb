@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v5.5@"
+VERSION="@ambver=v5.6@"
 VERSION_API="https://io.ues.cn/coin/index/updateaireg?ver="
 DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/aireg"
 
