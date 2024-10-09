@@ -164,8 +164,8 @@ check_app_runtime() {
 
         total_seconds=$(( 86400 * days + 3600 * hours + 60 * minutes + seconds ))
 
-        if (( total_seconds > 1800 )); then
-            echo "$app_path $app_param 运行超过 1 小时，运行时间为: ${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒。准备终止..."
+        if (( total_seconds > 900 )); then
+            echo "$app_path $app_param 运行超过 9分钟，运行时间为: ${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒。准备终止..."
             return 1
         else
             echo "$app_path $app_param 运行时间正常，目前运行了: ${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒。"
@@ -222,7 +222,7 @@ main() {
             echo "无法终止 $app_path $app_param，退出。"
             exit 1
         fi
-        sleep 3
+        sleep 5
         run_app "$app_path" "$app_param"
     fi
 }
