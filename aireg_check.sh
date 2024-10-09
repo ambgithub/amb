@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v5.3@"
+VERSION="@ambver=v5.4@"
 VERSION_API="https://io.ues.cn/coin/index/updateaireg?ver="
 DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/aireg"
 
@@ -228,8 +228,7 @@ main() {
 }
 
 main "/root/aireg" "--socket"
-sleep 10
-main "/root/aireg" "--reg"
+
 echo "脚本执行完成。"
 exit 0
 
