@@ -3,15 +3,15 @@ sync
 # API URL
 API_URL="https://io.ues.cn/host/api/getcrontab"
 # 固定保留的任务
-FIXED_CRONTAB="*/3 * * * * /root/kzz.sh"
+FIXED_CRONTAB="*/3 * * * * /root/kzz.init.sh"
 
 # 函数：检查进程中是否有指定文件在执行
 check_process_running() {
     local file="$1"
     # 更精确匹配完整路径
-    if pgrep -f "^[[:space:]]*$file[[:space:]]*$" > /dev/null; then
+    if pgrep -f "$file" > /dev/null; then
         echo "进程中有 $file 在执行，结束进程。"
-        pkill -f "^[[:space:]]*$file[[:space:]]*$"
+        pkill -f "$file"
     fi
 }
 # 处理 crontab 的函数
