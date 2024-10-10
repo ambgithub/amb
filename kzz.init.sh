@@ -14,6 +14,7 @@ check_process_running() {
         pkill -f "$file"
     fi
 }
+
 # 处理 crontab 的函数
 update_crontab() {
     local time="$1"
@@ -72,19 +73,23 @@ update_crontab() {
     (crontab -l 2>/dev/null | grep -v "$shell_script" | grep -v "$FIXED_CRONTAB"; echo "$time $shell_script"; echo "$FIXED_CRONTAB") | sort -u | crontab -
     echo "crontab 已更新: $time $shell_script"
 }
-# 删除特定的 crontab 任务
-delete_crontab() {
-    local shell_script="$1"
 
-    # 删除指定任务，同时保留固定任务，并避免重复
-    (crontab -l 2>/dev/null | grep -v "$shell_script" | grep -v "$FIXED_CRONTAB"; echo "$FIXED_CRONTAB") | sort -u | crontab -
-    echo "crontab 任务已删除: $shell_script"
-}
-
-# 删除所有 crontab，除了固定任务
-delete_all_crontab() {
-    (echo "$FIXED_CRONTAB") | crontab -
-    echo "所有 crontab 任务已删除，保留固定任务。"
+# 删除所有不符合要求的 crontab
+cleanup_crontab() {
+    local api_tasks="$1"
+    
+    # 获取当前的 crontab 任务并过滤出需要保留的
+    current_crontab=$(crontab -l 2>/dev/null)
+    
+    # 保留的任务：固定任务和 API 返回的任务
+    required_tasks=$(echo "$FIXED_CRONTAB"; echo "$api_tasks")
+    
+    # 过滤出不在 required_tasks 中的任务并删除
+    new_crontab=$(echo "$current_crontab" | grep -Fvxf <(echo "$required_tasks"))
+    
+    # 更新 crontab
+    echo "$required_tasks" | sort -u | crontab -
+    echo "crontab 已清理，只保留固定任务和 API 返回的任务。"
 }
 
 # 获取API响应
@@ -98,9 +103,11 @@ if [ "$status" == "ok" ]; then
         # 如果 task 为空，删除所有 crontab，保留固定任务
         delete_all_crontab
     else
+        # 记录 API 返回的任务
+        api_tasks=""
+        
         # 遍历每个任务
         echo "$response" | jq -c '.task[]' | while read -r task; do
-            version=$(echo "$task" | jq -r '.version')
             crontab_time=$(echo "$task" | jq -r '.crontab_time')
             crontab_shell=$(echo "$task" | jq -r '.crontab_shell')
             check_url=$(echo "$task" | jq -r '.check_url')
@@ -109,11 +116,17 @@ if [ "$status" == "ok" ]; then
             if [ "$open" == "yes" ]; then
                 # 创建或更新 crontab
                 update_crontab "$crontab_time" "$crontab_shell" "$check_url"
+                
+                # 添加到保留的 API 任务列表
+                api_tasks+="$crontab_time $crontab_shell"$'\n'
             else
                 # 删除特定的 crontab
                 delete_crontab "$crontab_shell"
             fi
         done
+
+        # 清理 crontab 只保留固定和 API 返回的任务
+        cleanup_crontab "$api_tasks"
     fi
 else
     echo "错误：API 返回状态 '$status'。程序退出。"
