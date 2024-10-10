@@ -84,10 +84,10 @@ cleanup_crontab() {
     # 保留的任务：固定任务和 API 返回的任务
     required_tasks=$(echo "$FIXED_CRONTAB"; echo "$api_tasks")
     
-    # 过滤出不在 required_tasks 中的任务并删除
+    # 删除当前 crontab 中不属于 required_tasks 的任务
     new_crontab=$(echo "$current_crontab" | grep -Fvxf <(echo "$required_tasks"))
     
-    # 更新 crontab
+    # 更新 crontab，仅保留所需任务
     echo "$required_tasks" | sort -u | crontab -
     echo "crontab 已清理，只保留固定任务和 API 返回的任务。"
 }
