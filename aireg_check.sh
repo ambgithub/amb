@@ -54,8 +54,8 @@ update_app() {
 kill_app() {
     local app_path="$1"
 
-    pkill -f "$app_path"
-    local pid=$(pgrep -f "$app_path")
+    pkill -f "^$app_path[[:space:]]*$"
+    local pid=$(pgrep -f "^$app_path[[:space:]]*$")
 
     if [[ ! -z "$pid" ]]; then
         echo "尝试优雅地终止 $app_path 进程, PID: $pid"
@@ -63,13 +63,13 @@ kill_app() {
 
         sleep 3
 
-        pid=$(pgrep -f "$app_path")
+        pid=$(pgrep -f "^$app_path[[:space:]]*$")
         if [[ ! -z "$pid" ]]; then
             echo "进程未终止，强制终止 $app_path 进程, PID: $pid"
             kill -9 "$pid"
             sleep 3
 
-            pid=$(pgrep -f "$app_path")
+            pid=$(pgrep -f "^$app_path[[:space:]]*$")
             if [[ ! -z "$pid" ]]; then
                 echo "$app_path 进程仍未能终止"
                 return 1
@@ -91,7 +91,7 @@ run_app() {
     local pid=$(pgrep -f "$app_path $app_param")
 
     if [[ -z "$app_param" ]]; then
-        pid=$(pgrep -f "$app_path")
+        pid=$(pgrep -f "^$app_path[[:space:]]*$")
     fi
 
     if [[ ! -z "$pid" ]]; then
@@ -108,7 +108,7 @@ run_app() {
 
     sleep 1
     if [[ -z "$app_param" ]]; then
-        pid=$(pgrep -f "$app_path")
+        pid=$(pgrep -f "^$app_path[[:space:]]*$")
     else
         pid=$(pgrep -f "$app_path $app_param")
     fi
@@ -128,7 +128,7 @@ check_app_running() {
     local pid=$(pgrep -f "$app_path $app_param")
 
     if [[ -z "$app_param" ]]; then
-        pid=$(pgrep -f "$app_path")
+        pid=$(pgrep -f "^$app_path[[:space:]]*$")
     fi
 
     if [[ ! -z "$pid" ]]; then
@@ -146,7 +146,7 @@ check_app_runtime() {
     local pid=$(pgrep -f "$app_path $app_param")
 
     if [[ -z "$app_param" ]]; then
-        pid=$(pgrep -f "$app_path")
+        pid=$(pgrep -f "^$app_path[[:space:]]*$")
     fi
 
     if [[ ! -z "$pid" ]]; then
