@@ -1,11 +1,11 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v6.1@"
+VERSION="@ambver=v6.2@"
 kill_app() {
     local app_path="$1"
 
-    pkill -f "^$app_path[[:space:]]*$"
-    local pid=$(pgrep -f "^$app_path[[:space:]]*$")
+    pkill -f "^$app_path[[:space:]]"
+    local pid=$(pgrep -f "^$app_path[[:space:]]")
 
     if [[ ! -z "$pid" ]]; then
         echo "尝试优雅地终止 $app_path 进程, PID: $pid"
@@ -13,13 +13,13 @@ kill_app() {
 
         sleep 3
 
-        pid=$(pgrep -f "^$app_path[[:space:]]*$")
+        pid=$(pgrep -f "^$app_path[[:space:]]")
         if [[ ! -z "$pid" ]]; then
             echo "进程未终止，强制终止 $app_path 进程, PID: $pid"
             kill -9 "$pid"
             sleep 3
 
-            pid=$(pgrep -f "^$app_path[[:space:]]*$")
+            pid=$(pgrep -f "^$app_path[[:space:]]")
             if [[ ! -z "$pid" ]]; then
                 echo "$app_path 进程仍未能终止"
                 return 1
