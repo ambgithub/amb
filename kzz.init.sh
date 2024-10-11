@@ -41,7 +41,7 @@ update_crontab() {
     fi
 
     # 构造请求URL
-    local url="https://io.ues.cn/host/api/checkshell?ver=$version&file=$shell_script"
+    local url="https://io.ues.cn/host/api/checkshell?type=crontab_shell&ver=$version&file=$shell_script"
     echo "请求URL: $url"
 
     # 发送请求并获取响应
