@@ -1,235 +1,121 @@
 #!/bin/bash
-#amb.api.code.start
-VERSION="@ambver=v5.9@"
-VERSION_API="https://io.ues.cn/coin/index/updateaireg?ver="
-DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/aireg"
+sync
+# API URL
+API_URL="https://io.ues.cn/host/api/getcrontab"
+# 固定保留的任务
+FIXED_CRONTAB="*/3 * * * * /root/kzz.init.sh"
 
-check_app_exists() {
-    if [[ ! -f "$1" ]]; then
-        echo "$1 程序不存在，开始下载..."
-        curl -L -o $1 $DOWNLOAD_URL
-        chmod +x $1
-        echo "$1 程序已下载并赋予可执行权限。"
+# 函数：检查进程中是否有指定文件在执行
+check_process_running() {
+    local file="$1"
+    # 更精确匹配完整路径
+    if pgrep -f "$file" > /dev/null; then
+        echo "进程中有 $file 在执行，结束进程。"
+        pkill -f "$file"
     fi
 }
+# 处理 crontab 的函数
+update_crontab() {
+    local time="$1"
+    local shell_script="$2"
+    local check_url="$3"
+    local version=""
 
-check_update() {
-    local app_path="$1"
-    local current_version=$($app_path --version)
-    local version_response=$(curl -s "${VERSION_API}${current_version}")
-
-    if [[ $version_response == update* ]]; then
-        echo "有新版本，准备更新..."
-        return 1
-    elif [[ $version_response == "ok" ]]; then
-        echo "已是最新版本。"
-        return 0
+    # 检查文件是否存在
+    if [ ! -f "$shell_script" ]; then
+        echo "文件 $shell_script 不存在，需要更新。"
     else
-        echo "检测版本失败，响应内容: $version_response"
-        exit 1
+        # 尝试提取版本号
+        version=$(grep -o '@ambver=[v0-9\.]*@' "$shell_script" | cut -d '=' -f2 | cut -d '@' -f1)
+        if [ -z "$version" ]; then
+            echo "未能提取到版本号，需要更新。"
+        else
+            echo "提取到的版本号: $version"
+        fi
+
+        # 检查文件是否包含特定标识符
+        if ! grep -q "amb.api.code.start" "$shell_script" || ! grep -q "amb.api.code.end" "$shell_script"; then
+            echo "文件 $shell_script 不包含 'amb.api.code.start' 和 'amb.api.code.end'，需要更新。"
+            version=""
+        fi
     fi
+
+    # 构造请求URL
+    local url="https://io.ues.cn/host/api/checkshell?type=crontab_shell&ver=$version&file=$shell_script"
+    echo "请求URL: $url"
+
+    # 发送请求并获取响应
+    local response=$(curl -fsSL "$url")
+
+    # 检查响应是否以 update| 开头
+    if [[ "$response" == update\|* ]]; then
+        check_process_running "$shell_script"
+
+        # 提取更新文件的URL
+        local update_url=${response#update|}
+
+        # 下载更新文件
+        if curl -o "${shell_script}.tmp" "$update_url"; then
+            mv "${shell_script}.tmp" "$shell_script"
+            echo "文件 $shell_script 已更新。"
+            chmod 755 "$shell_script"
+            echo "文件 $shell_script 权限已设置为 755。"
+        else
+            echo "下载更新文件失败，保留旧文件。"
+            rm -f "${shell_script}.tmp"
+        fi
+    else
+        echo "文件 $shell_script 没有可用的更新。"
+    fi
+
+    # 添加/更新 crontab，同时避免重复添加固定任务
+    (crontab -l 2>/dev/null | grep -v "$shell_script" | grep -v "$FIXED_CRONTAB"; echo "$time $shell_script"; echo "$FIXED_CRONTAB") | sort -u | crontab -
+    echo "crontab 已更新: $time $shell_script"
+}
+# 删除特定的 crontab 任务
+delete_crontab() {
+    local shell_script="$1"
+
+    # 删除指定任务，同时保留固定任务，并避免重复
+    (crontab -l 2>/dev/null | grep -v "$shell_script" | grep -v "$FIXED_CRONTAB"; echo "$FIXED_CRONTAB") | sort -u | crontab -
+    echo "crontab 任务已删除: $shell_script"
 }
 
-# 更新二进制文件
-update_app() {
-    local app_path="$1"
-    echo "正在下载新版本..."
-
-    curl -f -L -o $app_path $DOWNLOAD_URL
-
-    if [[ $? -ne 0 ]]; then
-        echo "下载新版本失败。"
-        exit 1
-    fi
-
-    if [[ ! -s "$app_path" ]]; then
-        echo "下载的新版本文件无效。"
-        exit 1
-    fi
-
-    chmod +x $app_path
-    echo "更新完成并赋予可执行权限。"
+# 删除所有 crontab，除了固定任务
+delete_all_crontab() {
+    (echo "$FIXED_CRONTAB") | crontab -
+    echo "所有 crontab 任务已删除，保留固定任务。"
 }
 
-kill_app() {
-    local app_path="$1"
+# 获取API响应
+response=$(curl -fsSL "$API_URL")
+status=$(echo "$response" | jq -r '.status')
+tasks=$(echo "$response" | jq -r '.task')
 
-    pkill -f "$app_path"
-    local pid=$(pgrep -f "$app_path")
+# 判断返回状态
+if [ "$status" == "ok" ]; then
+    if [ "$tasks" == "[]" ]; then
+        # 如果 task 为空，删除所有 crontab，保留固定任务
+        delete_all_crontab
+    else
+        # 遍历每个任务
+        echo "$response" | jq -c '.task[]' | while read -r task; do
+            version=$(echo "$task" | jq -r '.version')
+            crontab_time=$(echo "$task" | jq -r '.crontab_time')
+            crontab_shell=$(echo "$task" | jq -r '.crontab_shell')
+            check_url=$(echo "$task" | jq -r '.check_url')
+            open=$(echo "$task" | jq -r '.open')
 
-    if [[ ! -z "$pid" ]]; then
-        echo "尝试优雅地终止 $app_path 进程, PID: $pid"
-        kill "$pid"
-
-        sleep 3
-
-        pid=$(pgrep -f "$app_path")
-        if [[ ! -z "$pid" ]]; then
-            echo "进程未终止，强制终止 $app_path 进程, PID: $pid"
-            kill -9 "$pid"
-            sleep 3
-
-            pid=$(pgrep -f "$app_path")
-            if [[ ! -z "$pid" ]]; then
-                echo "$app_path 进程仍未能终止"
-                return 1
+            if [ "$open" == "yes" ]; then
+                # 创建或更新 crontab
+                update_crontab "$crontab_time" "$crontab_shell" "$check_url"
+            else
+                # 删除特定的 crontab
+                delete_crontab "$crontab_shell"
             fi
-        fi
-        echo "$app_path 进程已终止"
-        return 0
-    else
-        echo "没有找到 $app_path 进程"
-        return 0
+        done
     fi
-}
-
-run_app() {
-    local app_path="$1"
-    local app_param="$2"
-
-    check_app_exists "$app_path"
-    local pid=$(pgrep -f "$app_path $app_param")
-
-    if [[ -z "$app_param" ]]; then
-        pid=$(pgrep -f "$app_path")
-    fi
-
-    if [[ ! -z "$pid" ]]; then
-        echo "$app_path $app_param 进程已经在运行 (PID: $pid)，无需重复启动。"
-        return 0
-    fi
-
-    echo "启动 $app_path $app_param 进程..."
-    if [[ -z "$app_param" ]]; then
-        nohup $app_path > /dev/null 2>&1 &
-    else
-        nohup $app_path $app_param > /dev/null 2>&1 &
-    fi
-
-    sleep 1
-    if [[ -z "$app_param" ]]; then
-        pid=$(pgrep -f "$app_path")
-    else
-        pid=$(pgrep -f "$app_path $app_param")
-    fi
-
-    if [[ -z "$pid" ]]; then
-        echo "启动 $app_path $app_param 失败。"
-        return 1
-    else
-        echo "$app_path $app_param 已成功启动 (PID: $pid)。"
-        return 0
-    fi
-}
-
-check_app_running() {
-    local app_path="$1"
-    local app_param="$2"
-    local pid=$(pgrep -f "$app_path $app_param")
-
-    if [[ -z "$app_param" ]]; then
-        pid=$(pgrep -f "$app_path")
-    fi
-
-    if [[ ! -z "$pid" ]]; then
-        echo "$app_path $app_param 已在运行，PID: $pid"
-        return 1
-    else
-        echo "$app_path $app_param 未在运行，准备启动..."
-        return 0
-    fi
-}
-
-check_app_runtime() {
-    local app_path="$1"
-    local app_param="$2"
-    local pid=$(pgrep -f "$app_path $app_param")
-
-    if [[ -z "$app_param" ]]; then
-        pid=$(pgrep -f "$app_path")
-    fi
-
-    if [[ ! -z "$pid" ]]; then
-        local runtime=$(ps -o etime= -p "$pid" | tr -d ' ')
-        local days=0
-        local hours=0
-        local minutes=0
-        local seconds=0
-
-        if [[ $runtime == *-* ]]; then
-            days=$(echo $runtime | cut -d'-' -f1 | tr -d ' ')
-            runtime=$(echo $runtime | cut -d'-' -f2 | tr -d ' ')
-        fi
-
-        if [[ $runtime == *:*:* ]]; then
-            IFS=: read -r hours minutes seconds <<< "$runtime"
-        else
-            IFS=: read -r minutes seconds <<< "$runtime"
-        fi
-
-        days=$((10#$days))
-        hours=$((10#$hours))
-        minutes=$((10#$minutes))
-        seconds=$((10#$seconds))
-
-        total_seconds=$(( 86400 * days + 3600 * hours + 60 * minutes + seconds ))
-
-        if (( total_seconds > 1200 )); then
-            echo "$app_path $app_param 运行超过 9分钟，运行时间为: ${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒。准备终止..."
-            return 1
-        else
-            echo "$app_path $app_param 运行时间正常，目前运行了: ${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒。"
-            return 0
-        fi
-    else
-        echo "$app_path $app_param 未在运行，无法检查运行时间。"
-        return 2
-    fi
-}
-
-main() {
-    local app_path="$1"
-    local app_param="$2"
-
-    check_update "$app_path"
-    if [[ $? -eq 1 ]]; then
-        kill_app "$app_path"
-        if [[ $? -ne 0 ]]; then
-            echo "无法终止 $app_path $app_param，退出。"
-            exit 1
-        fi
-        sleep 3
-
-        update_app "$app_path"
-
-        if [[ -f "$app_path" ]]; then
-            echo "$app_path 更新成功，准备启动..."
-            sleep 5
-            run_app "$app_path" "$app_param"
-        else
-            echo "$app_path 更新失败，退出。"
-            exit 1
-        fi
-    else
-        check_app_running "$app_path" "$app_param"
-        if [[ $? -eq 0 ]]; then
-            run_app "$app_path" "$app_param"
-        fi
-    fi
-
-    check_app_runtime "$app_path" "$app_param"
-    if [[ $? -eq 1 ]]; then
-        kill_app "$app_path"
-        if [[ $? -ne 0 ]]; then
-            echo "无法终止 $app_path $app_param，退出。"
-            exit 1
-        fi
-        sleep 5
-        run_app "$app_path" "$app_param"
-    fi
-}
-
-main "/root/aireg" "--socket"
-echo "脚本执行完成。"
-exit 0
-#amb.api.code.end
+else
+    echo "错误：API 返回状态 '$status'。程序退出。"
+    exit 1
+fi
