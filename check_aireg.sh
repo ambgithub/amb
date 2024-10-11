@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v6.2@"
+VERSION="@ambver=v6.3@"
 VERSION_API="https://io.ues.cn/host/api/checkshell?type=run_app&ver="
 DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/aireg"
 
@@ -105,9 +105,9 @@ run_app() {
 
     echo "启动 $app_path $app_param 进程..."
     if [[ -z "$app_param" ]]; then
-        nohup $app_path > /dev/null 2>&1 &
+        nohup $app_path >> /root/run.log 2>&1 &
     else
-        nohup $app_path $app_param > /dev/null 2>&1 &
+        nohup $app_path $app_param >> /root/run.log 2>&1 &
     fi
 
     sleep 1
