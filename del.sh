@@ -5,7 +5,7 @@ INSTANCES=$(aws lightsail get-instances --query "instances[*].name" --output tex
 # 循环删除每个实例
 for INSTANCE_NAME in $INSTANCES; do
   # 跳过不想删除的实例
-  if [[ "$INSTANCE_NAME" == "amb" || "$INSTANCE_NAME" == "muban" ]]; then
+  if [[ "$INSTANCE_NAME" == "amb" || "$INSTANCE_NAME" == "bbc" ]]; then
     echo "跳过实例: $INSTANCE_NAME"
     continue
   fi
