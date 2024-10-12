@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v2.8@"
+VERSION="@ambver=v2.9@"
 # 定义一些变量
 VERSION_API="https://io.ues.cn/coin/index/updatedawn?ver="
 DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/dawn"
