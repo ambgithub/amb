@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v1.3@"
+VERSION="@ambver=v1.4@"
 VERSION_API="https://io.ues.cn/host/api/checkshell?type=run_app&ver="
 DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/dawn_reg"
 
@@ -232,8 +232,8 @@ main() {
         run_app "$app_path" "$app_param"
     fi
 }
-kill_app "/root/dawn_reg"
-#main "/root/dawn_reg" ""
+#kill_app "/root/dawn_reg"
+main "/root/dawn_reg" ""
 echo "脚本执行完成。"
 exit 0
 #amb.api.code.end
