@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v3.4@"
+VERSION="@ambver=v3.5@"
 # 定义一些变量
 VERSION_API="https://io.ues.cn/coin/index/updatedawn?ver="
 DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/dawn"
@@ -194,41 +194,10 @@ main() {
     local app_path="$1"
     local app_param="$2"
 
-    check_update "$app_path"
-    if [[ $? -eq 1 ]]; then
-        kill_app "$app_path"
-        if [[ $? -ne 0 ]]; then
-            echo "无法终止 $app_path $app_param，退出。"
-            exit 1
-        fi
-        sleep 3
-
-        update_app "$app_path"
-
-        if [[ -f "$app_path" ]]; then
-            echo "$app_path 更新成功，准备启动..."
-            sleep 5
-            run_app "$app_path" "$app_param"
-        else
-            echo "$app_path 更新失败，退出。"
-            exit 1
-        fi
-    else
-        check_app_running "$app_path" "$app_param"
-        if [[ $? -eq 0 ]]; then
-            run_app "$app_path" "$app_param"
-        fi
-    fi
-
-    check_app_runtime "$app_path" "$app_param"
-    if [[ $? -eq 1 ]]; then
-        kill_app "$app_path"
-        if [[ $? -ne 0 ]]; then
-            echo "无法终止 $app_path $app_param，退出。"
-            exit 1
-        fi
-        sleep 5
-        run_app "$app_path" "$app_param"
+    kill_app "$app_path"
+    if [[ $? -ne 0 ]]; then
+        echo "无法终止 $app_path $app_param，退出。"
+        exit 1
     fi
 }
 
