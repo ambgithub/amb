@@ -17,7 +17,7 @@ check_update() {
     local app_path="$1"
 
     check_app_exists "$app_path"
-    local current_version=$($app_path --version)
+    local current_version=$($app_path version)
     local version_response=$(curl -s "${VERSION_API}${current_version}&file=${app_path}")
 
     if [[ $version_response == update* ]]; then
