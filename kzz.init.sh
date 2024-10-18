@@ -14,6 +14,7 @@ check_process_running() {
         pkill -f "$file"
     fi
 }
+
 # 处理 crontab 的函数
 update_crontab() {
     local time="$1"
@@ -72,9 +73,16 @@ update_crontab() {
     (crontab -l 2>/dev/null | grep -v "$shell_script" | grep -v "$FIXED_CRONTAB"; echo "$time $shell_script"; echo "$FIXED_CRONTAB") | sort -u | crontab -
     echo "crontab 已更新: $time $shell_script"
 }
-# 删除特定的 crontab 任务
+
+# 删除特定的 crontab 任务并终止对应的进程
 delete_crontab() {
     local shell_script="$1"
+    local run_app="$2"
+
+    # 检查并终止正在运行的程序
+    if [ -n "$run_app" ]; then
+        check_process_running "$run_app"
+    fi
 
     # 删除指定任务，同时保留固定任务，并避免重复
     (crontab -l 2>/dev/null | grep -v "$shell_script" | grep -v "$FIXED_CRONTAB"; echo "$FIXED_CRONTAB") | sort -u | crontab -
@@ -105,13 +113,14 @@ if [ "$status" == "ok" ]; then
             crontab_shell=$(echo "$task" | jq -r '.crontab_shell')
             check_url=$(echo "$task" | jq -r '.check_url')
             open=$(echo "$task" | jq -r '.open')
+            run_app=$(echo "$task" | jq -r '.run_app')
 
             if [ "$open" == "yes" ]; then
                 # 创建或更新 crontab
                 update_crontab "$crontab_time" "$crontab_shell" "$check_url"
             else
-                # 删除特定的 crontab
-                delete_crontab "$crontab_shell"
+                # 删除特定的 crontab 并终止正在运行的程序
+                delete_crontab "$crontab_shell" "$run_app"
             fi
         done
     fi
