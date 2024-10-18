@@ -7,7 +7,6 @@ DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/dawn"
 
 check_app_exists() {
     if [[ ! -f "$1" ]]; then
-        rm -rf /root/cache.txt
         rm -rf /root/proxy.txt
         echo "$1 程序不存在，开始下载..."
         curl -L -o $1 $DOWNLOAD_URL
@@ -35,7 +34,6 @@ check_update() {
 
 # 更新二进制文件
 update_app() {
-    rm -rf /root/cache.txt
     rm -rf /root/proxy.txt
     local app_path="$1"
     echo "正在下载新版本..."
