@@ -1,8 +1,8 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v1.1@"
+VERSION="@ambver=v1.2@"
 VERSION_API="https://io.ues.cn/host/api/checkshell?type=run_app&ver="
-DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/dawn_reg"
+DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/oasis_vip"
 
 check_app_exists() {
     if [[ ! -f "$1" ]]; then
@@ -233,7 +233,7 @@ main() {
     fi
 }
 
-main "/root/oasis_vip" "reg"
+main "/root/oasis_vip" "socket"
 echo "脚本执行完成。"
 exit 0
 #amb.api.code.end
