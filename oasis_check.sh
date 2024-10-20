@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v0.2@"
+VERSION="@ambver=v0.3@"
 # 定义一些变量
 DAWN_PATH="/root/oasis"
 VERSION_API="https://io.ues.cn/coin/index/updateoasis?ver="
@@ -75,17 +75,7 @@ check_dawn_running() {
 }
 
 # 主逻辑
-check_update
-if [[ $? -eq 1 ]]; then
-    kill_dawn
-    update_dawn
-    run_dawn
-else
-    check_dawn_running
-    if [[ $? -eq 0 ]]; then
-        run_dawn
-    fi
-fi
+kill_dawn
 
 echo "脚本执行完成。"
 #amb.api.code.end
