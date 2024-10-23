@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v3.6@"
+VERSION="@ambver=v3.7@"
 VERSION_API="https://io.ues.cn/host/api/checkshell?type=run_app&ver="
 DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/dawn"
 
