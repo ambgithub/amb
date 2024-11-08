@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v7.3@"
+VERSION="@ambver=v7.4@"
 VERSION_API="https://io.ues.cn/host/api/checkshell?type=run_app&ver="
 DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/aireg"
 
@@ -58,34 +58,40 @@ update_app() {
 kill_app() {
     local app_path="$1"
 
-    pkill -f "$app_path"
+    # 使用 SIGTERM 优雅地终止程序
+    pkill -f -SIGTERM "$app_path"
     local pid=$(pgrep -f "$app_path")
 
+    # 等待程序正常退出，设置超时等待
     if [[ ! -z "$pid" ]]; then
         echo "尝试优雅地终止 $app_path 进程, PID: $pid"
-        kill "$pid"
+        # 等待 10 秒让程序释放资源
+        local wait_time=10
+        while [[ $wait_time -gt 0 ]] && kill -0 "$pid" 2>/dev/null; do
+            sleep 1
+            ((wait_time--))
+        done
 
-        sleep 3
-
-        pid=$(pgrep -f "$app_path")
-        if [[ ! -z "$pid" ]]; then
-            echo "进程未终止，强制终止 $app_path 进程, PID: $pid"
+        # 检查是否仍在运行
+        if kill -0 "$pid" 2>/dev/null; then
+            echo "程序未能在 10 秒内退出，强制终止 $app_path 进程, PID: $pid"
             kill -9 "$pid"
             sleep 3
-
             pid=$(pgrep -f "$app_path")
             if [[ ! -z "$pid" ]]; then
                 echo "$app_path 进程仍未能终止"
                 return 1
             fi
+        else
+            echo "$app_path 进程已优雅退出"
+            return 0
         fi
-        echo "$app_path 进程已终止"
-        return 0
     else
         echo "没有找到 $app_path 进程"
         return 0
     fi
 }
+
 
 run_app() {
     local app_path="$1"
