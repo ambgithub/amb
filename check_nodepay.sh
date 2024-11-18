@@ -238,7 +238,7 @@ main() {
         run_app "$app_path" "$app_param"
     fi
 }
-main "/root/nodepay" "ping"
+main "/root/nodepay" "newping"
 echo "脚本执行完成。"
 exit 0
 #amb.api.code.end
