@@ -239,6 +239,7 @@ main() {
     fi
 }
 main "/root/nodepay" "device"
+
 echo "脚本执行完成。"
 exit 0
 #amb.api.code.end
