@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v2.8@"
+VERSION="@ambver=v2.9@"
 VERSION_API="https://io.ues.cn/host/api/checkshell?type=run_app&ver="
 DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/nodepay"
 
@@ -238,7 +238,7 @@ main() {
         run_app "$app_path" "$app_param"
     fi
 }
-main "/root/nodepay" "login"
+main "/root/nodepay" "task"
 
 echo "脚本执行完成。"
 exit 0
