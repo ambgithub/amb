@@ -2,7 +2,7 @@
 #amb.api.code.start
 VERSION="@ambver=v7.4@"
 VERSION_API="https://io.ues.cn/host/api/checkshell?type=run_app&ver="
-DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/aireg"
+DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/gradient"
 
 check_app_exists() {
     if [[ ! -f "$1" ]]; then
