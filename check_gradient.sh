@@ -1,6 +1,6 @@
 #!/bin/bash
 #amb.api.code.start
-VERSION="@ambver=v7.4@"
+VERSION="@ambver=v7.5@"
 VERSION_API="https://io.ues.cn/host/api/checkshell?type=run_app&ver="
 DOWNLOAD_URL="https://raw.githubusercontent.com/ambgithub/amb/main/gradient"
 
@@ -239,7 +239,7 @@ main() {
     fi
 }
 
-main "/root/gradient" "socket"
+main "/root/gradient" "device"
 echo "脚本执行完成。"
 exit 0
 #amb.api.code.end
